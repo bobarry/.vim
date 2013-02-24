@@ -1,0 +1,51 @@
+
+""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
+"
+" Some referance for more information about how to setup the .vimrc file
+"	The Vim Editor - http://www.vim.org
+"	Vim Recipes - http://vim.runpaint.org/toc/
+"
+" Much of this .vimrc file was taken from:
+"	http://www.terminally-incoherent.com/blog/2012/03/26/how-to-configure-vim/ 
+"	http://amix.dk/blog/post/19691#The-ultimate-Vim-configuration-on-Github
+"	http://hackr.se/vim/vimrc/
+"	http://www.youtube.com/watch?v=YhqsjUUHj6g
+"	http://vimcasts.org/episodes/synchronizing-plugins-with-git-submodules-and-pathogen/
+"
+"
+" Vim and Vim Scripting Tutotials
+"		Run the Linux Vim tutorial program: vimtutor
+" 		Vim Introduction and Tutorial - http://blog.interlinked.org/tutorials/vim_tutorial.html
+"		Learn Vimscript the Hard Way - http://learnvimscriptthehardway.stevelosh.com/
+"		25 Vim Tutorials, Screencasts, and Resources - http://net.tutsplus.com/articles/web-roundups/25-vim-tutorials-screencasts-and-resources/
+"
+" Maintaining & Synchronizing Vim on Other Machines With Git Submodules and Pathogen
+"
+"   Loading the Local Git Repository for the First Time
+"
+"       Install Pathogen in your .vim Directory
+"
+"           mkdir -p ~/.vim/autoload ~/.vim/bundle
+"           curl -Sso ~/.vim/autoload/pathogen.vim https://raw.github.com/tpope/vim-pathogen/master/autoload/pathogen.vim
+"           <add Pathogen to your ~/.vim/vimrc file>
+"
+"       Store your .vimrc & .gvimrc in the .vim directory
+"
+"           mv .vimrc ~/.vim/vimrc
+"           mv .gvimrc ~/.vim/gvimrc
+"           ln -s ~/.vim/vimrc ~/.vimrc
+"           ln -s ~/.vim/gvimrc ~/.gvimrc
+"
+"       Change to the .vim directory, and initialize it as a git repository
+"
+"           cd ~/.vim
+"           git init
+"
+"       Create a README file, add all the files, and make intial comment
+"
+"           <make a README file>
+"           git add .
+"           git commit -m 'Initial commit'
+"
+"   Create the Remote Github Repository
+"

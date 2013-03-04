@@ -1,51 +1,114 @@
 
-""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
-"
-" Some referance for more information about how to setup the .vimrc file
-"	The Vim Editor - http://www.vim.org
-"	Vim Recipes - http://vim.runpaint.org/toc/
-"
-" Much of this .vimrc file was taken from:
-"	http://www.terminally-incoherent.com/blog/2012/03/26/how-to-configure-vim/ 
-"	http://amix.dk/blog/post/19691#The-ultimate-Vim-configuration-on-Github
-"	http://hackr.se/vim/vimrc/
-"	http://www.youtube.com/watch?v=YhqsjUUHj6g
-"	http://vimcasts.org/episodes/synchronizing-plugins-with-git-submodules-and-pathogen/
-"
-"
-" Vim and Vim Scripting Tutotials
-"		Run the Linux Vim tutorial program: vimtutor
-" 		Vim Introduction and Tutorial - http://blog.interlinked.org/tutorials/vim_tutorial.html
-"		Learn Vimscript the Hard Way - http://learnvimscriptthehardway.stevelosh.com/
-"		25 Vim Tutorials, Screencasts, and Resources - http://net.tutsplus.com/articles/web-roundups/25-vim-tutorials-screencasts-and-resources/
-"
-" Maintaining & Synchronizing Vim on Other Machines With Git Submodules and Pathogen
-"
-"   Loading the Local Git Repository for the First Time
-"
-"       Install Pathogen in your .vim Directory
-"
-"           mkdir -p ~/.vim/autoload ~/.vim/bundle
-"           curl -Sso ~/.vim/autoload/pathogen.vim https://raw.github.com/tpope/vim-pathogen/master/autoload/pathogen.vim
-"           <add Pathogen to your ~/.vim/vimrc file>
-"
-"       Store your .vimrc & .gvimrc in the .vim directory
-"
-"           mv .vimrc ~/.vim/vimrc
-"           mv .gvimrc ~/.vim/gvimrc
-"           ln -s ~/.vim/vimrc ~/.vimrc
-"           ln -s ~/.vim/gvimrc ~/.gvimrc
-"
-"       Change to the .vim directory, and initialize it as a git repository
-"
-"           cd ~/.vim
-"           git init
-"
-"       Create a README file, add all the files, and make intial comment
-"
-"           <make a README file>
-"           git add .
-"           git commit -m 'Initial commit'
-"
-"   Create the Remote Github Repository
-"
+ ------------------------------------------------------------------------------
+ 
+    References
+        Information about Vim
+            The Vim Editor - http://www.vim.org
+            Vim Recipes - http://vim.runpaint.org/toc/
+            Turning Vim into a modern Python IDE - http://sontek.net/blog/detail/turning-vim-into-a-modern-python-ide
+ 
+        Vim Scripting Tutorials
+            Run the Linux Vim tutorial program - Linux program called "vimtutor"
+            Vim Introduction and Tutorial - http://blog.interlinked.org/tutorials/vim_tutorial.html
+            Learn Vimscript the Hard Way - http://learnvimscriptthehardway.stevelosh.com/
+            25 Vim Tutorials, Screencasts, and Resources - http://net.tutsplus.com/articles/web-roundups/25-vim-tutorials-screencasts-and-resources/
+            How to Write Vim Plugins with Python - http://brainacle.com/how-to-write-vim-plugins-with-python.html
+ 
+        Maintaining & Synchronizing Vim on Other Machines
+            Git Submodules and Pathogen - http://vimcasts.org/episodes/synchronizing-plugins-with-git-submodules-and-pathogen/
+
+ ------------------------------------------------------------------------------
+ 
+     Using Vim's scripting language (and a great deal of insight and tools from others), I have setup Vim on my local machine to be an effective development environment for my needs. Using GitHub, I can replicate this Vim environment across the multiple systems I'm presently use.
+
+    I will explain here how I established the git environment on my local machine, how I established a GitHub for that environment, how to replicate the Vim environment to another machine, and how to update both the local git repository and GitHub.
+
+
+    ** Creating the Local Git Repository
+ 
+        Install Pathogen in your .vim Directory
+ 
+            mkdir -p ~/.vim/autoload ~/.vim/bundle
+            curl -Sso ~/.vim/autoload/pathogen.vim https://raw.github.com/tpope/vim-pathogen/master/autoload/pathogen.vim
+            <add Pathogen to your ~/.vim/vimrc file>
+ 
+        Store your .vimrc & .gvimrc in the .vim directory
+ 
+            mv .vimrc ~/.vim/vimrc
+            mv .gvimrc ~/.vim/gvimrc
+            ln -s ~/.vim/vimrc ~/.vimrc
+            ln -s ~/.vim/gvimrc ~/.gvimrc
+ 
+        Change to the .vim directory, and initialize it as a git repository
+ 
+            cd ~/.vim
+            git init
+ 
+        Create a README file, add all the files, and make initial comment
+ 
+            <make a README file>
+            git add .
+            git commit -m 'Initial commit'
+ 
+
+    ** Creating the GitHub Repository
+ 
+        Goto GitHub and create the new repository
+ 
+            goto https://github.com/jeffskinnerbox
+            <create empty repository called 'dotvim'>
+ 
+
+    ** Loading the GitHub Repository for the First Time
+ 
+        Within the ~.vim directory, use git to load the files to GitHub
+ 
+           git remote add origin https://github.com/jeffskinnerbox/dotvim.git
+           git push -u origin master
+ 
+
+    ** To update your local git repository
+
+        Do a "get status" to see what will be included in the commit, add files (or remove) that are required, and then do the commit to the local git repository.
+
+            git status
+            git add <files>   (or git rm <files>)
+
+
+    ** To Perform the Initial Replication of .vim Environment on Another Machine
+ 
+        Login into the target machine and go to its $HOME
+ 
+            cd ~
+            git clone http://github.com/jeffskinnerbox/dotvim.git ~/.vim
+            ln -s ~/.vim/vimrc ~/.vimrc
+            ln -s ~/.vim/gvimrc ~/.gvimrc
+            cd ~/.vim
+            git submodule init
+            git submodule update
+    
+    
+    ** To Upgrading Your .vim Directory From Remote GitHub Repository
+ 
+            cd ~/.vim
+            ?????????? git pull origin master ???????????
+ 
+
+    ** To Upgrading a Plugin in bundle Directory
+ 
+        At some point in the future, a plugin might be updated. If this plugin
+        also uses Git, you can fetch the latest changes via
+ 
+            cd ~/.vim/bundle/<plugin>
+            git pull origin master
+ 
+        To upgrading all bundled plugins
+ 
+            git submodule foreach git pull origin master
+ 
+
+    ** To Update the Local Git Repository
+ 
+            ????????????????
+ 
+ ------------------------------------------------------------------------------

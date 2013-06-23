@@ -1,0 +1,19 @@
+#!/bin/bash
+
+# This script sets up the .vim directory and other thing
+
+mkdir ~/tmp/old_vim_files
+mv .vim .vimrc .gvimrc ~/tmp/old_vim_files
+
+cd ~
+mkdir -p ~/.vim/autoload ~/.vim/bundle ~/.vim/backup ~/.vim/tmp
+curl -Sso ~/.vim/autoload/pathogen.vim https://raw.github.com/tpope/vim-pathogen/master/autoload/pathogen.vim
+
+cd ~/.vim/bundle
+git clone git://github.com/scrooloose/nerdtree.git
+git clone git://github.com/klen/python-mode.git
+git clone git://github.com/vim-scripts/ScrollColors.git
+git clone git://github.com/scrooloose/nerdcommenter.git
+
+ln -s ~/.vim/vimrc ~/.vimrc
+ln -s ~/.vim/gvimrc ~/.vimrc

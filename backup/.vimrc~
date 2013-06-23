@@ -566,19 +566,6 @@ set ffs=unix,dos,mac
 
 
 """""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""" 
-"  Speical Syntax-Highlighting
-"
-"""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""" 
-" Force the syntax-highlight based on the nature of the file name
-augroup VimSyntax
-    " delete any old autocommands in this group
-    autocmd!
-    autocmd BufReadPost *bash* set syntax=sh
-augroup END
-
-
-
-"""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""" 
 "   Files, Backups, and Undo
 "
 """""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""" 

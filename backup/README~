@@ -1,94 +1,130 @@
-# Bash Dotfiles
 
-## Bash
-According to the bash man page, .bash_profile is executed for login shells,
-while .bashrc is executed for interactive non-login shells.
-
-When you login (type username and password) via console, either sitting at the
-machine, or remotely via ssh: .bash_profile is executed to configure your shell
-before the initial command prompt.  But, if you’ve already logged into your
-machine and open a new terminal window (xterm) inside Gnome or KDE, then
-.bashrc is executed before the window command prompt. .bashrc is also run when
-you start a new bash instance by typing /bin/bash in a terminal.
-
-### References / Sources
- - http://ss64.com/bash/shopt.html
- - http://tldp.org/LDP/abs/html/sample-bashrc.html
-
-## Aliases and Functions
-A Bash alias is essentially nothing more than a keyboard shortcut, an
-abbreviation, a means of avoiding typing a long command sequence.  Bash does
-not expand arguments within the alias body, or expand an alias itself with Linux
-"compound constructs," such as if/then statements, loops, and functions, nor
-will alias’ expand recursively.
-
-In Bash, a function is like a subroutine, a code block that implements a set of
-operations, that performs a specified task. Wherever there is repetitive code,
-when a task repeats with only slight variations in procedure, then consider
-using a function.
-
-### References / Sources
- - http://tldp.org/LDP/abs/html/aliases.html
- - http://tldp.org/LDP/abs/html/functions.html
- - http://hayne.net/MacDev/Bash/aliases.bash
- - http://www.cyberciti.biz/tips/bash-aliases-mac-centos-linux-unix.html
-  
-## Install
- To clone these Bash scripts and use them on another system, execute the following:
- ```sh
- cd ~
- git clone https://github.com/jeffskinnerbox/dotbash.git ~/.bash
- ln -s ~/.bash/bash_aliases ~/.bash_aliases
- ln -s ~/.bash/bash_logout ~/.bash_logout
- ln -s ~/.bash/bash_profile ~/.bash_profile
- ln -s ~/.bash/bashrc ~/.bashrc
- cd ~/.bash
- ```
-
-# Managing Git Repository and GitHub
-
-## Creating the Local Git Repository
-Make the .bash directory, move into it, and initialize it as a git repository
-```sh
-cd ~
-mkdir .bash
-cd .bash
-git init
-<Create a README, bash_aliases, bash_logout, bash_profile, and bashrc files>
-git add .
-git commit -m 'Initial Creation of Bash Scripts'
-```
-
-
-
-# TO DO LIST
- COLORS-Dircolors - http://www.linux-sxs.org/housekeeping/dircolor.html
- http://ubuntuforums.org/showthread.php?t=41538
+ ------------------------------------------------------------------------------
  
- BASH shell aliases I can't live without - http://bicchi.blogspot.com/2007/03/bash-shell-aliases-i-cant-leave-without.html
- Git Basics - Tips and Tricks - http://git-scm.com/book/en/Git-Basics-Tips-and-Tricks
+    References
+        Information about Vim
+            The Vim Editor - http://www.vim.org
+            Vim Recipes - http://vim.runpaint.org/toc/
+            Turning Vim into a modern Python IDE - http://sontek.net/blog/detail/turning-vim-into-a-modern-python-ide
  
+        Vim Scripting Tutorials
+            Run the Linux Vim tutorial program - Linux program called "vimtutor"
+            Vim Introduction and Tutorial - http://blog.interlinked.org/tutorials/vim_tutorial.html
+            Learn Vimscript the Hard Way - http://learnvimscriptthehardway.stevelosh.com/
+            25 Vim Tutorials, Screencasts, and Resources - http://net.tutsplus.com/articles/web-roundups/25-vim-tutorials-screencasts-and-resources/
+            How to Write Vim Plugins with Python - http://brainacle.com/how-to-write-vim-plugins-with-python.html
+ 
+        Maintaining & Synchronizing Vim on Other Machines
+            Git Submodules and Pathogen - http://vimcasts.org/episodes/synchronizing-plugins-with-git-submodules-and-pathogen/
+            Get Referance - http://gitref.org/
+
+ ------------------------------------------------------------------------------
+ 
+    Using Vim's scripting language (and a great deal of insight and tools from others),
+    I have setup Vim on my local machine to be an effective development environment
+    for my needs.  Using GitHub, I can replicate this Vim environment across the
+    multiple systems I'm presently use.
+
+    I will explain here how I established the git environment on my local machine,
+    how I established a GitHub for that environment, how to replicate the Vim environment
+    to another machine, and how to update both the local git repository and GitHub.
+
+
+    ** Creating the Local Git Repository
+ 
+        Install Pathogen in your .vim Directory
+ 
+            mkdir -p ~/.vim/autoload ~/.vim/bundle
+            curl -Sso ~/.vim/autoload/pathogen.vim https://raw.github.com/tpope/vim-pathogen/master/autoload/pathogen.vim
+            <add Pathogen to your ~/.vim/vimrc file>
+ 
+        Store your .vimrc & .gvimrc in the .vim directory
+ 
+            mv .vimrc ~/.vim/vimrc
+            mv .gvimrc ~/.vim/gvimrc
+            ln -s ~/.vim/vimrc ~/.vimrc
+            ln -s ~/.vim/gvimrc ~/.gvimrc
+ 
+        Change to the .vim directory, and initialize it as a git repository
+ 
+            cd ~/.vim
+            git init
+ 
+        Create a README file, add all the files, and make initial comment
+ 
+            <make a README file>
+            git add .
+            git commit -m 'Initial commit'
  
 
- see /usr/share/doc/bash/examples/startup-files (in the package bash-doc)
- for examples
-
- Change / Setup bash custom prompt
-   http://www.cyberciti.biz/tips/howto-linux-unix-bash-shell-setup-prompt.html
-   http://www.maketecheasier.com/8-useful-and-interesting-bash-prompts/2009/09/04
-   https://wiki.archlinux.org/index.php/Color_Bash_Prompt
-   http://www.thegeekstuff.com/2008/09/bash-shell-ps1-10-examples-to-make-your-linux-prompt-like-angelina-jolie/
-   sane bash environment - https://github.com/rtomayko/dotfiles/blob/rtomayko/.bashrc
-
-   FULL 256 COLOR SUPPORT FOR VIM AND/OR XTERM ON UBUNTU 12.04 - http://emerg3nc3.wordpress.com/2012/07/28/full-256-color-support-for-vim-andor-xterm-on-ubuntu-12-04/
+    ** Creating the GitHub Repository
  
-  http://tldp.org/LDP/abs/html/index.html
-  http://www.caliban.org/bash
-  http://www.shelldorado.com/scripts/categories.html
-  http://www.dotfiles.org
+        Goto GitHub and create the new repository
  
- Shell Prompt - for many examples, see:
-       http://www.debian-administration.org/articles/205
-       http://www.askapache.com/linux/bash-power-prompt.html
-       http://tldp.org/HOWTO/Bash-Prompt-HOWTO
-       https://github.com/nojhan/liquidprompt
+            goto https://github.com/jeffskinnerbox
+            <create empty repository called 'dotvim'>
+ 
+
+    ** Loading the GitHub Repository for the First Time
+ 
+        Within the ~.vim directory, use git to load the files to GitHub
+ 
+            git remote add origin https://github.com/jeffskinnerbox/dotvim.git
+            git push -u origin master
+ 
+
+    ** To Update the Local Git Repository
+
+        Within the .vim diretory, do a "get status" to see what will be included in the commit,
+        add files (or remove) that are required, and then do the commit to the local git repository.
+
+            git status
+            git add <files>   (or git rm <files>)
+            git commit --dry-run
+            git commit
+
+
+    ** To Update the Remote (i.e. GitHub) Repository
+
+        To which shows you the URL that Git has stored for the shortname to for
+        the remote (GitHub) repository:
+
+            git remote -v
+
+        Now to push your files to the GitHub repository
+
+            git push -u origin master
+
+
+    ** To Perform the Initial Replication of .vim Environment on Another Machine
+ 
+        Login into the target machine and go to its $HOME
+ 
+            cd ~
+            git clone http://github.com/jeffskinnerbox/dotvim.git ~/.vim
+            ln -s ~/.vim/vimrc ~/.vimrc
+            ln -s ~/.vim/gvimrc ~/.gvimrc
+            cd ~/.vim
+            git submodule init
+            git submodule update
+    
+    
+    ** To Upgrading Your .vim Directory From Remote GitHub Repository
+ 
+            cd ~/.vim
+            ?????????? git pull origin master ???????????
+ 
+
+    ** To Upgrading a Plugin in bundle Directory
+ 
+        At some point in the future, a plugin might be updated. If this plugin
+        also uses Git, you can fetch the latest changes via
+ 
+            cd ~/.vim/bundle/<plugin>
+            git pull origin master
+ 
+        To upgrading all bundled plugins
+ 
+            git submodule foreach git pull origin master
+ 
+ ------------------------------------------------------------------------------

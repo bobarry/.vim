@@ -21,6 +21,7 @@ git clone git://github.com/scrooloose/nerdtree.git
 git clone git://github.com/klen/python-mode.git
 git clone git://github.com/vim-scripts/ScrollColors.git
 git clone git://github.com/scrooloose/nerdcommenter.git
+git clone git://github.com/plasticboy/vim-markdown.git
 
 ln -s ~/.vim/vimrc ~/.vimrc
 ln -s ~/.vim/gvimrc ~/.vimrc

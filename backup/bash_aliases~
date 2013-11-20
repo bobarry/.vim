@@ -11,11 +11,11 @@ shopt -s expand_aliases
 # Short-hand commands for commonly used programs
 alias clr='clear'                   # clear the screen
 alias cls='clear'                   # clear the screen
-alias vi='vim -p'                   # When using Vim, open multiple files within separate tabs
+alias vi='vim -g -p'                # When using Vim, open in GUI mode and multiple files within separate tabs
 alias chrome='chromium-browser'     # Linux version of Chrome web browser
 alias grc='gnuradio-companion'      # Short hand for GNU Radio Companion
-alias du='du -kh'                   # Makes a more readable output.
-alias df='df -kTh'                  # Makes a more readable output.
+alias du='du -kh'                   # Makes a more readable output of estimated file space usage
+alias df='df -kTh'                  # Makes a more readable output of file system disk space usage
 alias ports='netstat -tulanp'       # list all TCP/UDP port
 alias update='sudo apt-get update && sudo apt-get upgrade'  # update on one command 
  
@@ -70,20 +70,23 @@ alias cd......='cd ../../../../..'
 
 ################################## Functions ##################################
 
-# remove files to tmp directory
+# Remove files to Trash (this located at ~/.local/share/Trash) instead of deleting them.
+# Trash is part of the FreeDesktop.org Trash Specification. It remembers the name,
+# original path, deletion date, and permissions of each trashed file.
+# Also see utilities list-trash, restore-trash, and empty-trash.
 function rmt {
-    mv $* $HOME/tmp
+    trash $*
 }
 
 # Function to run upon exit of shell
-function _exit() {
-    echo -e "${BRed}Hasta la vista, baby${NC}"
+function _exit {
+    echo -e "${BRed}Hasta la vista, baby!${NC}"
+    sleep 1
 }
 trap _exit EXIT
 
 # kill by process name
-function killps()
-{
+function killps {
     local pid pname sig="-TERM"   # default signal
     if [ "$#" -lt 1 ] || [ "$#" -gt 2 ]; then
         echo "Usage: killps [-SIGNAL] pattern"
@@ -100,8 +103,7 @@ function killps()
     done
 }
 
-function ask()
-{
+function ask {
     echo -n "$@" '[y/n] ' ; read ans
     case "$ans" in
         y*|Y*) return 0 ;;
@@ -109,19 +111,22 @@ function ask()
     esac
 }
 
-function my_ps() {
-    ps $@ -u $USER -o pid,%cpu,%mem,bsdtime,command
+function my_ps {
+    /bin/ps $@ -u $USER -o pid,%cpu,%mem,bsdtime,command
 }
 
 # Get IP adress on ethernet
-function my_ip()
-{
+function my_ip {
     MY_IP=$(/sbin/ifconfig eth0 | awk '/inet/ { print $2 } ' | sed -e s/addr://)
     echo ${MY_IP:-"Not connected"}
 }
 
 # Find a file that contains a give string
-function findfile()
-{
+function findfile {
     /usr/bin/find . -name '*'"$@"'*'
+}
+
+# remind yourself of an alias (given some part of it)
+function showa {
+    /bin/grep -i -a1 $@ ~/.bash_aliases | /bin/grep -v '^\s*$'
 }

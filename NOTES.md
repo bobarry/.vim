@@ -7,6 +7,15 @@ via [git][01] and [GitHub][02].  For more information, check out these posts:
 
 ===
 
+Using Vim's scripting language (and a great deal of insight and tools from others),
+I have setup Vim on my local machine to be an effective development environment
+for my needs.  Using GitHub, I can replicate this Vim environment across the
+multiple systems I'm presently use.
+
+I will explain here how I established the git environment on my local machine,
+how I established a GitHub for that environment, how to replicate the Vim environment
+to another machine, and how to update both the local git repository and GitHub.
+
 ### Creating Your Local Git Repository
 Copy existing Pathogen Git repository into your local systems $Home/.vim directory.
 
@@ -50,7 +59,7 @@ add files (or remove) that are required, and then do the commit to the local git
     git status
     git add <files>   (or git rm <files>)
     git commit --dry-run
-    git commit
+    git commit -m 'Some comments'
 
 ### To Update the Remote (i.e. GitHub) Repository
 To which shows you the URL that Git has stored for the shortname to for

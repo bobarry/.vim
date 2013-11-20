@@ -1,4 +1,5 @@
-# Vim Dotfiles
+Vim Dotfiles
+============
 Using Vim's scripting language (and a great deal of insight and tools from others),
 I have setup Vim on my local machine to be an effective development environment
 for my needs.  Using GitHub, I can replicate this Vim environment across the
@@ -8,7 +9,7 @@ I will explain here how I established the git environment on my local machine,
 how I established a GitHub for that environment, how to replicate the Vim envirnment
 to another machine, and how to update both the local git repository and GitHub.
  
-### References / Sources
+#### References / Sources
 Information about Vim
 
 * [The Vim Editor][01]
@@ -16,8 +17,8 @@ Information about Vim
 * [Turning Vim into a modern Python IDE][03]
  
 Vim Scripting Tutorials
-* Run the Linux Vim tutorial program - Linux program called "vimtutor"
 
+* Run the Linux Vim tutorial program - Linux program called "vimtutor"
 * [Vim Introduction and Tutorial][04]
 * [Learn Vimscript the Hard Way][05]
 * [25 Vim Tutorials, Screencasts, and Resources][06]

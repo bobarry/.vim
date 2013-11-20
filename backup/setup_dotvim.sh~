@@ -4,7 +4,8 @@
 #   Using Git and Github to Manage Your Dotfiles - http://blog.smalleycreative.com/tutorials/using-git-and-github-to-manage-your-dotfiles/
 #   Managing dot files with Git - http://blog.sanctum.geek.nz/managing-dot-files-with-git/
 #
-# This script sets up the .vim directory and other thing
+# This script will setup the .vim directory, and in general, make the Vim
+# resource file usable.  This should be executed immediately after you do the
 
 # First make a backup of anything you plan to blow away
 mkdir ~/tmp/old_vim_files
@@ -21,6 +22,7 @@ git clone git://github.com/scrooloose/nerdtree.git
 git clone git://github.com/klen/python-mode.git
 git clone git://github.com/vim-scripts/ScrollColors.git
 git clone git://github.com/scrooloose/nerdcommenter.git
+git clone git://github.com/plasticboy/vim-markdown.git
 
 ln -s ~/.vim/vimrc ~/.vimrc
 ln -s ~/.vim/gvimrc ~/.vimrc

@@ -1,143 +1,47 @@
 
 """"""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
-" 
-"    References
-"        Information about Vim
-"            The Vim Editor - http://www.vim.org
-"            Vim Recipes - http://vim.runpaint.org/toc/
-"            Turning Vim into a modern Python IDE - http://sontek.net/blog/detail/turning-vim-into-a-modern-python-ide
-" 
-"        Vim Scripting Tutorials
-"            Run the Linux Vim tutorial program - Linux program called "vimtutor"
-"            Vim Introduction and Tutorial - http://blog.interlinked.org/tutorials/vim_tutorial.html
-"            Learn Vimscript the Hard Way - http://learnvimscriptthehardway.stevelosh.com/
-"            25 Vim Tutorials, Screencasts, and Resources - http://net.tutsplus.com/articles/web-roundups/25-vim-tutorials-screencasts-and-resources/
-"            How to Write Vim Plugins with Python - http://brainacle.com/how-to-write-vim-plugins-with-python.html
-" 
-"        Maintaining & Synchronizing Vim on Other Machines
-"            Git Submodules and Pathogen - http://vimcasts.org/episodes/synchronizing-plugins-with-git-submodules-and-pathogen/
-"            Get Reference - http://gitref.org/
-"
-" ------------------------------------------------------------------------------
-" 
-"    Using Vim's scripting language (and a great deal of insight and tools from others),
-"    I have setup Vim on my local machine to be an effective development environment
-"    for my needs.  Using GitHub, I can replicate this Vim environment across the
-"    multiple systems I'm presently use.
-"
-"    I will explain here how I established the git environment on my local machine,
-"    how I established a GitHub for that environment, how to replicate the Vim environment
-"    to another machine, and how to update both the local git repository and GitHub.
-"
-"
-"    ** Creating the Local Git Repository
-" 
-"        Install Pathogen in your .vim Directory
-" 
-"            mkdir -p ~/.vim/autoload ~/.vim/bundle
-"            curl -Sso ~/.vim/autoload/pathogen.vim https://raw.github.com/tpope/vim-pathogen/master/autoload/pathogen.vim
-"            <add Pathogen to your ~/.vim/vimrc file>
-" 
-"        Store your .vimrc & .gvimrc in the .vim directory
-" 
-"            mv .vimrc ~/.vim/vimrc
-"            mv .gvimrc ~/.vim/gvimrc
-"            ln -s ~/.vim/vimrc ~/.vimrc
-"            ln -s ~/.vim/gvimrc ~/.gvimrc
-" 
-"        Change to the .vim directory, and initialize it as a git repository
-" 
-"            cd ~/.vim
-"            git init
-" 
-"        Create a README file, add all the files, and make initial comment
-" 
-"            <make a README file>
-"            git add .
-"            git commit -m 'Initial commit'
-" 
-"
-"    ** Creating the GitHub Repository
-" 
-"        Goto GitHub and create the new repository
-" 
-"            goto https://github.com/jeffskinnerbox
-"            <create empty repository called 'dotvim'>
-" 
-"
-"    ** Loading the GitHub Repository for the First Time
-" 
-"        Within the ~.vim directory, use git to load the files to GitHub
-" 
-"            git remote add origin https://github.com/jeffskinnerbox/dotvim.git
-"            git push -u origin master
-" 
-"
-"    ** To Update the Local Git Repository
-"
-"        Within the .vim directory, do a "get status" to see what will be included in the commit,
-"        add files (or remove) that are required, and then do the commit to the local git repository.
-"
-"            git status
-"            git add <files>   (or git rm <files>)
-"            git commit --dry-run
-"            git commit
-"
-"
-"    ** To Update the Remote (i.e. GitHub) Repository
-"
-"        To which shows you the URL that Git has stored for the shortname to for
-"        the remote (GitHub) repository:
-"
-"            git remote -v
-"
-"        Now to push your files to the GitHub repository
-"
-"            git push -u origin master
-"
-"
-"    ** To Perform the Initial Replication of .vim Environment on Another Machine
-" 
-"        Login into the target machine and go to its $HOME
-" 
-"            cd ~
-"            git clone http://github.com/jeffskinnerbox/dotvim.git ~/.vim
-"            ln -s ~/.vim/vimrc ~/.vimrc
-"            ln -s ~/.vim/gvimrc ~/.gvimrc
-"            cd ~/.vim
-"            git submodule init
-"            git submodule update
-"    
-"    
-"    ** To Upgrading Your .vim Directory From Remote GitHub Repository
-" 
-"            cd ~/.vim
-"            ?????????? git pull origin master ???????????
-" 
-"
-"    ** To Upgrading a Plugin in bundle Directory
-" 
-"        At some point in the future, a plugin might be updated. If this plugin
-"        also uses Git, you can fetch the latest changes via
-" 
-"            cd ~/.vim/bundle/<plugin>
-"            git pull origin master
-" 
-"        To upgrading all bundled plugins
-" 
-"            git submodule foreach git pull origin master
+"   General Stuff
 "
 """""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
 
 " FOR DEBUGGING: when bigger than zero, Vim will give messages about what it is doing
-set verbose=0
+set verbose=0 
 
 " default leader is '\', but many people prefer ','
 let mapleader = ","
 let g:mapleader = ","
 
-" automatic reload of .vimrc after it's saved (great for when your editing .vimrc)
+" automatic reload of .vimrc after it's saved (great for when your editing .vimrc itself)
 autocmd bufwritepost .vimrc source %
+
+set nocompatible    " make vim incompatible to vi
+
+set number			" enable line numbers
+set numberwidth=4	" space provided for line numbering
+
+set nocompatible	" not compatible with the old-fashion vi mode
+set bs=2			" allow backspacing over everything in insert mode
+set autoread		" auto read when file is changed from outside
+set hidden			" buffers can exist in background
+
+if has('cmdline_info')
+    set ruler                   " show the ruler
+    set rulerformat=%30(%=\:b%n%y%m%r%w\ %l,%c%V\ %P%) " a ruler on steroids
+    set showcmd                 " show partial commands in status line and selected characters/lines in visual mode
+endif
+
+" highlight current line, background color
+set cursorline
+hi cursorline guibg=#333333
+hi CursorColumn guibg=#333333
+
+" use colored highlighting for file types recognized
+"syntax on			" Enable syntax highlighting
+"filetype on			" Enable filetype detection
+"filetype indent on	" Enable filetype-specific indenting
+
+set history=200		" sets how many command line history VIM has to remember
+set undolevels=200  " use many muchos levels of undo
 
 
 
@@ -242,44 +146,16 @@ map <silent><F11> :PREVCOLOR<cr>
 let g:vim_markdown_folding_disabled=1       " disable folding
 
 
+"------------------------------ conky-syntax.vim -------------------------------
+" to install
+"       cd ~/.vim/bundle
+"       git clone git://github.com/smancill/conky-syntax.vim.git
+autocmd BufRead,BufNewFile *conkyrc* setfiletype conkyrc
+
 "-------------------------------- NERDCommenter --------------------------------
 " to install
 "       cd ~/.vim/bundle
 "       git clone git://github.com/scrooloose/nerdcommenter.git`
-
-
-"""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""" 
-"	General
-"
-"""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""" 
-set nocompatible    " make vim incompatible to vi
-
-set number			" enable line numbers
-set numberwidth=4	" space provided for line numbering
-
-set nocompatible	" not compatible with the old-fashion vi mode
-set bs=2			" allow backspacing over everything in insert mode
-set autoread		" auto read when file is changed from outside
-set hidden			" buffers can exist in background
-
-if has('cmdline_info')
-    set ruler                   " show the ruler
-    set rulerformat=%30(%=\:b%n%y%m%r%w\ %l,%c%V\ %P%) " a ruler on steroids
-    set showcmd                 " show partial commands in status line and selected characters/lines in visual mode
-endif
-
-" highlight current line, background color
-set cursorline
-hi cursorline guibg=#333333
-hi CursorColumn guibg=#333333
-
-" use colored highlighting for file types recognized
-"syntax on			" Enable syntax highlighting
-"filetype on			" Enable filetype detection
-"filetype indent on	" Enable filetype-specific indenting
-
-set history=200		" sets how many command line history VIM has to remember
-set undolevels=200  " use many muchos levels of undo
 
 
 
@@ -287,9 +163,12 @@ set undolevels=200  " use many muchos levels of undo
 "	Vim Start-Up Position
 "
 """""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""" 
+" To see or to set the current Vim window position on the screen, you can use ':winpos'
+" or ':winpos x y' but this will only work in the GUI (i.e. gvim).
+"
 " http://www.scarpa.name/2011/04/06/terminal-vim-resizing/
 " http://vim.wikia.com/wiki/Restore_screen_size_and_position
-"
+
 " Function to increase the size of the terminal window for Vim editing
 function! SizeUpFunc()
     if exists("g:oldColumns")
@@ -541,29 +420,30 @@ set formatoptions=1	" to stop unexpected effects, use :set paste and leave this 
 "  Colors and Fonts
 "
 """""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""" 
+" To select a font, do ':set guifont=*' and select the font you want to use.
+" Once you're happy with it, do ':set guifont?' and it will output the current
+" setting of the value. Put the the font into your .vimrc via 'set guifont=foo"'
+
 " Set extra options when running in GUI mode
-if has("gui_running")       " settings for GVim
+if has("gui_running")           " settings for GVim
 	set t_Co=256
 	set guitablabel=%M\ %t
-    set guioptions-=T       " remove the toolbar
+    set guioptions-=T           " remove the toolbar
     set guioptions-=r
     set guioptions-=L
     set guioptions+=a
 	set guioptions+=e
     set guioptions-=m
-    colorscheme wombat256mod
-else                        " settings for Vim
+    colorscheme jellybeans
+    set guifont=Inconsolata\ 10
+else                            " settings for Vim
     set t_Co=256
     colorscheme jellybeans
+    set guifont=Consolas:h10:cANSI
 endif
 
-" set all lines after columns 80 to another color
-"execute 'set colorcolumn=' . join(range(81,335), ',')
+"execute 'set colorcolumn=' . join(range(81,335), ',')  " set all lines after columns 80 to another color
 set colorcolumn=80          	" puts a single color line at the column given
-
-"set guifont=courier_new:h11:b
-"set guifont=Lucida_Console:h8:cDEFAULT
-set guifont=Consolas:h10:cANSI
 
 " Set utf8 as standard encoding and en_US as the standard language
 set encoding=utf8
@@ -742,14 +622,15 @@ hi statusline guibg=DarkGrey ctermfg=8 guifg=White ctermbg=15
 "
 " Requires the `markdown` command to be on the system path. If you
 " do not have the `markdown` command, install one of the following:
+"       http://www.pell.portland.or.us/~orc/Code/discount/
+"       http://www.freewisdom.org/projects/python-markdown/
 "
-" http://www.pell.portland.or.us/~orc/Code/discount/
-" http://www.freewisdom.org/projects/python-markdown/
+" An alternative to the markdown command could be to install Markdown Preview
+" extention in your browser (Chrome). You can get the extention here:
+"       https://chrome.google.com/webstore/search/markdown%20preview?hl=en
 "
 function!PreviewMarkdown()
-    " **************************************************************
-    " Configurable settings
- 
+    " ** Configurable settings start here **
     let MARKDOWN_COMMAND = 'markdown'
  
     if has('win32')
@@ -759,8 +640,7 @@ function!PreviewMarkdown()
         let BROWSER_COMMAND = 'xdg-open'
     endif
  
-    " End of configurable settings
-    " **************************************************************
+    " ** End of configurable settings **
  
     silent update
     let output_name = tempname() . '.html'
@@ -813,8 +693,9 @@ function!PreviewMarkdown()
  
     silent exec '!' . BROWSER_COMMAND . ' "' . output_name . '"'
  
-    exec input('Press ENTER to continue...')
-    echo
+    "exec input('Press ENTER to continue...')
+    "echo
+    sleep 500m                  " sleep for 500 miliseconds
     exec delete(output_name)
     redraw!
  

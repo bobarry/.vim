@@ -150,12 +150,21 @@ let g:vim_markdown_folding_disabled=1       " disable folding
 " to install
 "       cd ~/.vim/bundle
 "       git clone git://github.com/smancill/conky-syntax.vim.git
-autocmd BufRead,BufNewFile *conkyrc* setfiletype conkyrc
+"autocmd BufRead,BufNewFile *conkyrc set filetype=conkyrc
+
+
+"------------------------------ arduino-syntax.vim -------------------------------
+" to install
+"       cd ~/.vim/bundle
+"       git clone https://github.com/sudar/vim-arduino-syntax.git
+"autocmd BufRead,BufNewFile *.ino setfiletype arduino
+"autocmd BufRead,BufNewFile *.pde setfiletype arduino
+
 
 "-------------------------------- NERDCommenter --------------------------------
 " to install
 "       cd ~/.vim/bundle
-"       git clone git://github.com/scrooloose/nerdcommenter.git`
+"       git clone git://github.com/scrooloose/nerdcommenter.git
 
 
 
@@ -462,7 +471,6 @@ augroup VimSyntax
     " delete any old autocommands in this group
     autocmd!
     autocmd BufReadPost *bash* set syntax=sh
-    autocmd BufReadPost *.ino set syntax=cpp
 augroup END
 
 

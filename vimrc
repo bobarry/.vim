@@ -145,21 +145,15 @@ map <silent><F11> :PREVCOLOR<cr>
 "       git clone git://github.com/plasticboy/vim-markdown.git
 let g:vim_markdown_folding_disabled=1       " disable folding
 
-
 "------------------------------ conky-syntax.vim -------------------------------
 " to install
 "       cd ~/.vim/bundle
 "       git clone git://github.com/smancill/conky-syntax.vim.git
-"autocmd BufRead,BufNewFile *conkyrc set filetype=conkyrc
 
-
-"------------------------------ arduino-syntax.vim -------------------------------
+"--------------------------- vim-arduino-syntax.vim ----------------------------
 " to install
 "       cd ~/.vim/bundle
 "       git clone https://github.com/sudar/vim-arduino-syntax.git
-"autocmd BufRead,BufNewFile *.ino setfiletype arduino
-"autocmd BufRead,BufNewFile *.pde setfiletype arduino
-
 
 "-------------------------------- NERDCommenter --------------------------------
 " to install

@@ -9,4 +9,7 @@
 # /boot was on /dev/sda1 during installation
 UUID=0695b758-41f8-40b2-b79c-0e11fa40885b /boot           ext2    defaults        0       2
 /dev/mapper/ubuntu--vg-swap_1 none            swap    sw              0       0
-/dev/sdb1 /home auto defaults 0 0
+#/dev/sdb1 /home auto defaults 0 0
+#/dev/md0 /home2 auto defaults 0 0
+/dev/md0 /home auto defaults 0 0
+/dev/sdd1 /mnt/backup ext3 defaults 1 2

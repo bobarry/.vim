@@ -1,32 +1,136 @@
-#
-#	gr-scan - A GNU Radio signal scanner
-#	Copyright (C) 2012  Nicholas Tomlinson
-#	
-#	This program is free software: you can redistribute it and/or modify
-#	it under the terms of the GNU General Public License as published by
-#	the Free Software Foundation, either version 3 of the License, or
-#	(at your option) any later version.
-#	
-#	This program is distributed in the hope that it will be useful,
-#	but WITHOUT ANY WARRANTY; without even the implied warranty of
-#	MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
-#	GNU General Public License for more details.
-#	
-#	You should have received a copy of the GNU General Public License
-#	along with this program.  If not, see <http://www.gnu.org/licenses/>. 
-#
 
-VERSION=2012082301
-CXXFLAGS=-DVERSION="\"gr-scan $(VERSION)\"" -std=c++11 -Wall -I/usr/include/gnuradio -I/usr/include/osmosdr -lgnuradio-core -lgnuradio-osmosdr -lboost_system -O2 -s -Wno-unused-function
+# Static Libraries, i.e. ".a" files
+# Dynamically Linked "Shared Object" Libraries, i.e. ".so" files
+#NAME=nRF24L01
+#LIBNAME=lib$(NAME).so
+#SLIBNAME=lib$(NAME).a
+#LIBDIR=/usr/local/lib
 
-gr-scan: *.cpp *.hpp
-	g++ $(CXXFLAGS) -o gr-scan main.cpp
+# The recommended compiler flags for the Raspberry Pi
+#CCFLAGS = -Wall -Ofast -mfpu=vfp -mfloat-abi=hard -march=armv6zk -mtune=arm1176jzf-s
+
+# The reccomend compiler flages for Ubuntu
+CCFLAGS = -Wall -W -Werror -fPIC -Ofast
+CPPCFLAGS = $(CCFLAGS)
+
+INCPATH = /usr/include
+LIBPATH = /usr/lib
+LIBNAME = argtable2
+
+# define all programs
+C_PROGRAMS = clp
+C_OBJECTS = ${C_PROGRAMS:=.o}
+C_SOURCES = $(C_PROGRAMS:=.c)
+CPP_PROGRAMS = 
+CPP_OBJECTS = ${CPP_PROGRAMS:=.o}
+CPP_SOURCES = $(CPP_PROGRAMS:=.cpp)
+
+all: $(C_PROGRAMS)
+
+$(C_PROGRAMS): $(C_SOURCES)
+	gcc $(CCFLAGS) -I$(INCPATH) -L$(LIBPATH) -l$(LIBNAME) $@.c -o $@
+
+$(CPP_PROGRAMS): $(CPP_SOURCES)
+	g++ $(CPPCFLAGS) -I$(INCPATH) -L$(LIBPATH) -l$(LIBNAME) $@.cpp -o $@
 
 clean:
-	rm -f gr-scan gr-scan.tar.gz
+	rm -f $(C_OBJECTS) $(CPP_OBJECTS)
 
-dist:
-	mkdir gr-scan-$(VERSION)
-	cp *.cpp *.hpp Makefile COPYING gr-scan-$(VERSION)
-	tar -cf - gr-scan-$(VERSION) | gzip -9 -c - > gr-scan-$(VERSION).tar.gz
-	rm -r gr-scan-$(VERSION)
+cleanall: clean
+	rm -f $(C_PROGRAMS) $(CPP_PROGRAMS)
+
+#---------------------------------------------------------
+#
+##############################################################################
+##
+## Makefile for libnRF24L01 on Raspberry Pi
+##
+## License: GPL (General Public License)
+## Author:  gnulnulf <arco@appeltaart.mine.nu>
+## Date:    2013/02/07 (version 1.0)
+##
+## Description:
+## ------------
+## use make all and mak install to install the library 
+## You can change the install directory by editing the LIBDIR line
+##
+#
+## Static Libraries, i.e. ".a" files
+## Dynamically Linked "Shared Object" Libraries, i.e. ".so" files
+#NAME=nRF24L01
+#LIBNAME=lib$(NAME).so
+#SLIBNAME=lib$(NAME).a
+#LIBDIR=/usr/local/lib
+##LIBDIR=/home/pi/lib
+#
+##C_PROGRAMS = compatibility
+##CPP_PROGRAMS = RF24 gpio spi
+##
+##C_SOURCES = ${C_PROGRAMS:=.c}
+##CPP_SOURCES = ${CPP_PROGRAMS:=.cpp}
+##C_OBJECTS = ${C_PROGRAMS:=.o}
+##CPP_OBJECTS = ${CPP_PROGRAMS:=.o}
+#
+## The recommended compiler flags for the Raspberry Pi
+#CCFLAGS=-Ofast -mfpu=vfp -mfloat-abi=hard -march=armv6zk -mtune=arm1176jzf-s
+#
+##.PHONY: examples
+#
+## make all
+#.PHONY: examples
+#all: library examples
+#
+##library: $(SLIBNAME)
+#library: $(LIBNAME)
+#
+#examples:
+#	make -C examples
+#
+## Make the library
+##$(LIBNAME}: ${C_OBJECTS} ${CPP_OBJECTS}
+##	g++ -shared -Wl,-soname,${LIBNAME} ${CCFLAGS} -o ${LIBNAME} ${C_OBJECTS} ${CPP_OBJECTS}
+#
+## Make the library - Dynamically Linked
+#$(LIBNAME): RF24.o gpio.o spi.o compatibility.o
+#	g++ -shared -Wl,-soname,$(LIBNAME) $(CCFLAGS) -o $(LIBNAME) compatibility.o gpio.o spi.o RF24.o
+#
+## Make the library - Static Libraries
+##$(SLIBNAME): RF24.o gpio.o spi.o compatibility.o
+##	ar rcs $@ compatibility.o gpio.o spi.o RF24.o
+#
+## Library parts
+##${CPP_OBJECTS}: ${CPP_SOURCES}
+##	g++ -Wall -fPIC ${CCFLAGS} -c $@
+##
+##${C_OBJECTS}: ${C_SOURCES}
+##	gcc -Wall -fPIC ${CCFLAGS} -c $@
+#
+## Library parts
+#RF24.o: RF24.cpp RF24.h RF24_config.h RF24_config.h
+#	g++ -Wall -fPIC $(CCFLAGS) -c RF24.cpp
+#
+#gpio.o: gpio.cpp gpio.h
+#	g++ -Wall -fPIC $(CCFLAGS) -c gpio.cpp
+#
+#spi.o: spi.cpp spi.h
+#	g++ -Wall -fPIC $(CCFLAGS) -c spi.cpp
+#
+#compatibility.o: compatibility.c compatibility.h
+#	gcc -Wall -fPIC $(CCFLAGS) -c compatibility.c
+#
+## clear the locally built library and object files
+#clean:
+#	rm -f *.o $(LIBNAME) $(SLIBNAME)
+#	make -C examples clean
+#
+## clear all the built files and the nstalled library
+#cleanall: clean
+#	rm -f $(LIBDIR)/$(LIBNAME)
+#	make -C examples cleanall
+#
+## Install the library to LIBPATH
+#install: all 
+##	ln -sf LIBDIR}/$(LIBNAME} LIBNAME}
+#	cp $(LIBNAME) $(LIBDIR)/$(LIBNAME)
+#	ldconfig
+#

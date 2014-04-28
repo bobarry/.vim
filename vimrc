@@ -273,20 +273,20 @@ hi TabLineSel ctermfg=DarkGreen ctermbg=Gray
 "  Spell Checking
 "
 """""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""" 
-" here are the commands you need to know for spell
+" here are the minimal commands you need to know for spell
 "   ]s    move to the next misspelled word
 "   [s    move to the previous misspelled word
 "   zg    add a word to the dictionary
 "   zug   undo the addition of a word to the dictionary
-"   z=    view spelling suggestions for a mispelled word
-setlocal nospell            " disable inline spell check at stratup
-setlocal spelllang=en_us    " use USA English spelling dictionary
+"   z=    view spelling suggestions for a misspelled word
+setlocal spell spelllang=en_us   " use USA English spelling dictionary
+setlocal nospell                 " disable inline spell check at startup
+
+" file used when you add words you don't want flagged by spell
+set spellfile=$HOME/.vim/spell/en.utf-8.add
 
 " toggle and untoggle spell checking
 map <leader>sp :setlocal spell!<cr>
-
-" Pressing ,ss will toggle and untoggle spell checking
-" map <leader>ss :setlocal spell!<cr>
 
 " Shortcuts using <leader>
 " map <leader>sn ]s
@@ -306,7 +306,7 @@ let &t_SI.="\e[5 q"
 let &t_EI.="\e[1 q"
 let &t_te.="\e[0 q"
 
-" determines the number of context lines you would like to see above and below the cursoret to 999 to center cursor
+" determines the number of context lines you would like to see above and below the cursor to 999 to center cursor
 set scrolloff=7
 
 set mouse=a		" Enable mouse usage; to paste, press shift while selecting with the mouse
@@ -413,7 +413,7 @@ set wildmode=list:longest,full
 
 set wrap			" wrap lines when they are larger than the window size
 set wrapmargin=4	" number of characters from right window border when wrapping starts
-set tw=500			" Linebreak on 500 characters
+set tw=500			" Line break on 500 characters
 set lbr
 set formatoptions=1	" to stop unexpected effects, use :set paste and leave this mode via :set nopaste
 
@@ -431,7 +431,7 @@ set formatoptions=1	" to stop unexpected effects, use :set paste and leave this 
 if has("gui_running")           " settings for GVim
 	set t_Co=256
 	set guitablabel=%M\ %t
-    set guioptions-=T           " remove the toolbar
+    set guioptions-=T           " remove the tool bar
     set guioptions-=r
     set guioptions-=L
     set guioptions+=a
@@ -494,7 +494,7 @@ iabbrev #c /********************************************************************
 iabbrev #v """"""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
 iabbrev #s #-----------------------------------------------------------------------------
 iabbrev @@ jeff.irland@gmail.net
-iabbrev ccopy Copyright 2013 Jeffrey C. Irland, all rights reserved.
+iabbrev ccopy Copyright 2014 Jeffrey C. Irland, all rights reserved.
 
 
 
@@ -518,6 +518,9 @@ nnoremap Y y$
 
 " Switch CWD to the directory of the open buffer
 map <leader>cd :cd %:p:h<cr>:pwd<cr>
+
+" Allow saving of files as sudo when you forgot to start vim using sudo.
+cmap w!! w !sudo tee > /dev/null %
 
 " use these mapping to establish the muscle memory to become a Vim power user
 "    - map <esc> to 'jk' and turn off <esc>
@@ -578,7 +581,7 @@ set wildignore+=*.orig                              " Merge resolution files
 "
 """""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""" 
 " format the status line at the bottom of the Vim window
-" status line broken down into easily includeable segments
+" status line broken down into easily include-able segments
 if has('statusline')
     set laststatus=2                                " Always show the status line
     set statusline=%<File:\ %f                      " Filename
@@ -586,9 +589,9 @@ if has('statusline')
    "set statusline+=%{fugitive#statusline()}        " Git Hotness
     set statusline+=\ [%{&ff}/%Y]                   " file type
     set statusline+=\ CWD:\ %{getcwd()}             " current working directory
-   "set statusline+=\ [A=\%03.3b/H=\%02.2B]         " ASCII / Hexadecimal value of character under curser
+   "set statusline+=\ [A=\%03.3b/H=\%02.2B]         " ASCII / Hexadecimal value of character under cursor
     set statusline+=\ \ \ \ \ \ \ \ \ \ \ \ \ \     " spacing
-    set statusline+=(Line:\ %l/%L,\ Column:\ %c)    " curent line number, total lines, and curent column
+    set statusline+=(Line:\ %l/%L,\ Column:\ %c)    " current line number, total lines, and current column
 endif
 
 function! InsertStatuslineColor(mode)

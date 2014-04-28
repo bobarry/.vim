@@ -6,7 +6,7 @@ for my needs.  Using GitHub, I can replicate this Vim environment across the
 multiple systems I'm presently use.
 
 I will explain here how I established the git environment on my local machine,
-how I established a GitHub for that environment, how to replicate the Vim envirnment
+how I established a GitHub for that environment, how to replicate the Vim environment
 to another machine, and how to update both the local git repository and GitHub.
  
 #### References / Sources
@@ -27,7 +27,7 @@ Vim Scripting Tutorials
 Maintaining and Synchronizing Vim on Other Machines
 
 * [Submodules and Pathogen][08]
-* [Git Referance][09]
+* [Git Reference][09]
 
 
 

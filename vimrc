@@ -14,6 +14,15 @@ let g:mapleader = ","
 " automatic reload of .vimrc after it's saved (great for when your editing .vimrc itself)
 autocmd bufwritepost .vimrc source %
 
+" Set behavior for mouse and selection.  Valid arguments are mswin and xterm
+if has('win32') || has('win64')
+    source $VIMRUNTIME/vimrc_example.vim    " contains example settings that may be useful
+    source $VIMRUNTIME/mswin.vim            " map a few keys to the MS-Windows cut/copy/paste commands
+    behave mswin                            " MS-Windows behavior (work more or less like a typical Windows editor)
+else
+    behave xterm                            " Xterm behavior
+endif
+
 set nocompatible    " make vim incompatible to vi
 
 set number			" enable line numbers
@@ -643,7 +652,8 @@ function!PreviewMarkdown()
         " note important extra pair of double-quotes
         let BROWSER_COMMAND = 'cmd.exe /c start ""'
     else
-        let BROWSER_COMMAND = 'xdg-open'
+        "let BROWSER_COMMAND = 'xdg-open'
+        let BROWSER_COMMAND = 'chromium-browser'
     endif
  
     " ** End of configurable settings **
@@ -699,7 +709,7 @@ function!PreviewMarkdown()
  
     silent exec '!' . BROWSER_COMMAND . ' "' . output_name . '"'
  
-    "exec input('Press ENTER to continue...')
+    "exec input('Markdown file with be formated in browser.  Press ENTER to continue...')
     "echo
     sleep 500m                  " sleep for 500 miliseconds
     exec delete(output_name)
@@ -725,4 +735,34 @@ function! HasPaste()
   endif
   return ''
 endfunction
+
+" This is a function that defines Vim's behavior when used for diffing two or more buffers.
+" It checks if your environment is able to do the diff itself and, if not, use the builtin diff.
+if has('win32') || has('win64')
+    set diffexpr=MyDiff()
+    function MyDiff()
+        let opt = '-a --binary '
+        if &diffopt =~ 'icase' | let opt = opt . '-i ' | endif
+        if &diffopt =~ 'iwhite' | let opt = opt . '-b ' | endif
+        let arg1 = v:fname_in
+        if arg1 =~ ' ' | let arg1 = '"' . arg1 . '"' | endif
+        let arg2 = v:fname_new
+        if arg2 =~ ' ' | let arg2 = '"' . arg2 . '"' | endif
+        let arg3 = v:fname_out
+        if arg3 =~ ' ' | let arg3 = '"' . arg3 . '"' | endif
+        let eq = ''
+        if $VIMRUNTIME =~ ' '
+            if &sh =~ '\<cmd'
+                let cmd = '""' . $VIMRUNTIME . '\diff"'
+                let eq = '"'
+            else
+                let cmd = substitute($VIMRUNTIME, ' ', '" ', '') . '\diff"'
+            endif
+        else
+                let cmd = $VIMRUNTIME . '\diff'
+        endif
+        silent execute '!' . cmd . ' ' . opt . arg1 . ' ' . arg2 . ' > ' . arg3 . eq
+    endfunction
+endif
+
 

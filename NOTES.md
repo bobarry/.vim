@@ -59,7 +59,7 @@ add files (or remove) that are required, and then do the commit to the local git
     git status
     git add <files>   (or git rm <files>)
     git commit --dry-run
-    git commit -m 'Some comments'
+    git commit -m <comment>
 
 ### To Update the Remote (i.e. GitHub) Repository
 To which shows you the URL that Git has stored for the shortname to for

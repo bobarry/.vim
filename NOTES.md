@@ -57,7 +57,7 @@ Within the .vim directory, do a "get status" to see what will be included in the
 add files (or remove) that are required, and then do the commit to the local git repository.
 
     git status
-    git add <files>   (or git rm <files>)
+    git add --all
     git commit --dry-run
     git commit -m <comment>
 

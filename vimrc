@@ -1,3 +1,5 @@
+" Maintainer:   jeff.irland@gmail.com
+" Version:      1.0
 
 """"""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
 "   General Stuff
@@ -41,8 +43,8 @@ endif
 
 " highlight current line, background color
 set cursorline
-hi cursorline guibg=#333333
-hi CursorColumn guibg=#333333
+hi cursorline guibg=#5c5c5c
+hi CursorColumn guibg=#5c5c5c
 
 " use colored highlighting for file types recognized
 "syntax on			" Enable syntax highlighting
@@ -61,7 +63,7 @@ set undolevels=200  " use many muchos levels of undo
 "---------------------------------- Pathogen -----------------------------------
 " to install Pathogen for managing your plugins
 "       mkdir -p ~/.vim/autoload ~/.vim/bundle
-"       curl -Sso ~/.vim/autoload/pathogen.vim https://raw.github.com/tpope/vim-pathogen/master/autoload/pathogen.vim
+"       curl -Sso ~/.vim/autoload/pathogen.vim https://raw.githubusercontent.com/tpope/vim-pathogen/master/autoload/pathogen.vim
 " Now you install all your plugins into a .vim/bundle/<plugin-name> folder
 "
 " call pathogen to install the remaining plugins
@@ -188,7 +190,7 @@ function! SizeUpFunc()
     endif
     let g:oldColumns = &columns     " Save the current width
     let g:oldLines = &lines         " Save the current length
-    winpos 420 25	                " loaction of window when Vim opens
+    winpos 900 25	                " location of window when Vim opens
     set lines=75                    " number of lines in the terminal window when Vim opens
     set columns=130                 " number of columns in the terminal window when Vim opens
 endfunction
@@ -489,8 +491,13 @@ set noswapfile
 
 " keep temporary and backup files (make sure to create these directories first)
 set backup
-set backupdir=~/.vim/backup
-set directory=~/.vim/tmp
+if has('win32') || has('win64')
+    set backupdir=C:\\Users\jeffrey.c.irland\Temp\backup    " for MS-Windows
+    set directory=C:\\Users\jeffrey.c.irland\Temp\tmp       " for MS-Windows
+else
+    set backupdir=~/.vim/backup                             " for Linux
+    set directory=~/.vim/tmp                                " for Linux
+endif
 
 
 
@@ -648,12 +655,13 @@ function!PreviewMarkdown()
     " ** Configurable settings start here **
     let MARKDOWN_COMMAND = 'markdown'
  
-    if has('win32')
+    if has('win32') || has('win64')
         " note important extra pair of double-quotes
         let BROWSER_COMMAND = 'cmd.exe /c start ""'
     else
         "let BROWSER_COMMAND = 'xdg-open'
-        let BROWSER_COMMAND = 'chromium-browser'
+        "let BROWSER_COMMAND = 'chromium-browser'
+        let BROWSER_COMMAND = 'google-chrome --enable-plugins'
     endif
  
     " ** End of configurable settings **
@@ -688,7 +696,7 @@ function!PreviewMarkdown()
         \ output_name . '"'
     silent exec md_command
  
-    if has('win32')
+    if has('win32') || has('win64')
         let footer_name = tempname()
         call writefile(['</div></body></html>'], footer_name)
         silent exec '!type "' . footer_name . '" >> "' . output_name . '"'

@@ -18,8 +18,11 @@ mv .vim .vimrc .gvimrc ~/tmp/old_vim_files
 # make the additional directories that you need
 mkdir -p ~/.vim/autoload ~/.vim/bundle ~/.vim/backup ~/.vim/tmp
 
+# download and install your vim resource file
+curl -Sso ~/.vim/vimrc https://raw.githubusercontent.com/jeffskinnerbox/dotvim/master/vimrc
+
 # download and install pathogen
-curl -Sso ~/.vim/autoload/pathogen.vim https://raw.github.com/tpope/vim-pathogen/master/autoload/pathogen.vim
+curl -Sso ~/.vim/autoload/pathogen.vim https://raw.githubusercontent.com/tpope/vim-pathogen/master/autoload/pathogen.vim
 
 # now install the other Vim plugins
 cd ~/.vim/bundle

@@ -23,6 +23,7 @@ Vim Scripting Tutorials
 * [Learn Vimscript the Hard Way][05]
 * [25 Vim Tutorials, Screencasts, and Resources][06]
 * [How to Write Vim Plugins with Python][07]
+* [:best of Vim][10]
  
 Maintaining and Synchronizing Vim on Other Machines
 
@@ -40,3 +41,4 @@ Maintaining and Synchronizing Vim on Other Machines
  [07]:http://brainacle.com/how-to-write-vim-plugins-with-python.html
  [08]:http://vimcasts.org/episodes/synchronizing-plugins-with-git-submodules-and-pathogen/
  [09]:http://gitref.org/
+ [10]:http://www.bestofvim.com/

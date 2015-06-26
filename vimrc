@@ -1,5 +1,5 @@
 " Maintainer:   jeff.irland@gmail.com
-" Version:      1.0
+" Version:      1.0.1
 
 """"""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
 "   General Stuff
@@ -7,14 +7,17 @@
 """""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
 
 " FOR DEBUGGING: when bigger than zero, Vim will give messages about what it is doing
-set verbose=0 
+set verbose=0
 
 " default leader is '\', but many people prefer ','
 let mapleader = ","
 let g:mapleader = ","
 
-" automatic reload of .vimrc after it's saved (great for when your editing .vimrc itself)
-autocmd bufwritepost .vimrc source %
+" automatic reload of .vimrc after it's saved (great for when your editing .vimrc itself) - http://www.bestofvim.com/tip/auto-reload-your-vimrc/
+augroup reload_vimrc
+    autocmd!
+    autocmd BufWritePost $MYVIMRC source $MYVIMRC
+augroup END
 
 " Set behavior for mouse and selection.  Valid arguments are mswin and xterm
 if has('win32') || has('win64')
@@ -36,7 +39,7 @@ set autoread		" auto read when file is changed from outside
 set hidden			" buffers can exist in background
 
 if has('cmdline_info')
-    set ruler                   " show the ruler
+    set ruler                   " always show the current position
     set rulerformat=%30(%=\:b%n%y%m%r%w\ %l,%c%V\ %P%) " a ruler on steroids
     set showcmd                 " show partial commands in status line and selected characters/lines in visual mode
 endif
@@ -54,6 +57,8 @@ hi CursorColumn guibg=#5c5c5c
 set history=200		" sets how many command line history VIM has to remember
 set undolevels=200  " use many muchos levels of undo
 
+" improve the display of line wraps - http://www.bestofvim.com/tip/better-line-wraps/
+set showbreak=↪
 
 
 """"""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
@@ -84,12 +89,10 @@ let NERDTreeQuitOnOpen=1
 let NERDTreeShowHidden=1
 let NERDTreeKeepTreeInNewTab=1
 
+" close vim if the only window left open is a NERDTree
 augroup VimNERDTree
-    " delete any old autocommands in this group
     autocmd!
-    " open a NERDTree automatically when vim starts up
-    "autocmd VimEnter * NERDTree
-    " close vim if the only window left open is a NERDTree
+    "autocmd VimEnter * NERDTree    " open a NERDTree automatically when vim starts up
     autocmd BufEnter * if (winnr("$") == 1 && exists("b:NERDTreeType") && b:NERDTreeType == "primary") | q | endif
 augroup END
 
@@ -173,10 +176,10 @@ let g:vim_markdown_folding_disabled=1       " disable folding
 
 
 
-"""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""" 
+""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
 "	Vim Start-Up Position
 "
-"""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""" 
+""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
 " To see or to set the current Vim window position on the screen, you can use ':winpos'
 " or ':winpos x y' but this will only work in the GUI (i.e. gvim).
 "
@@ -226,10 +229,10 @@ set viminfo^=%
 
 
 
-"""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""" 
+""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
 "  Folding
 "
-"""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""" 
+""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
 " here are the commands you need to know for folding
 "   zi      toggle folding feature on/off
 "   zf#j    creates a fold from the cursor down # lines.
@@ -246,7 +249,7 @@ set viminfo^=%
 "   zE      deletes all folds.
 "   [z      move to start of open fold.
 "   ]z      move to end of open fold.
-set foldcolumn=2    " include open/close folding button of width provided
+set foldcolumn=2    " Add a bit extra margin to the left when folding
 set nofoldenable    " don't fold by default
 
 "augroup VimFolding
@@ -259,10 +262,10 @@ set nofoldenable    " don't fold by default
 
 
 
-"""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""" 
+""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
 "  Window Tabs
 "
-"""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""" 
+""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
 " Useful mappings for managing tabs
 map <leader>tn :tabnew<cr>
 map <leader>to :tabonly<cr>
@@ -280,10 +283,10 @@ hi TabLineSel ctermfg=DarkGreen ctermbg=Gray
 
 
 
-"""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""" 
+""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
 "  Spell Checking
 "
-"""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""" 
+""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
 " here are the minimal commands you need to know for spell
 "   ]s    move to the next misspelled word
 "   [s    move to the previous misspelled word
@@ -307,10 +310,10 @@ map <leader>sp :setlocal spell!<cr>
 
 
 
-"""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""" 
+""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
 "	VIM User Interface
 "
-"""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""" 
+""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
 " Vim will show a block cursor in normal mode and a line cursor in insert mode
 let &t_ti.="\e[1 q"
 let &t_SI.="\e[5 q"
@@ -323,7 +326,7 @@ set scrolloff=7
 set mouse=a		" Enable mouse usage; to paste, press shift while selecting with the mouse
 
 " Height of the command bar
-set cmdheight=1
+set cmdheight=2
 
 " Configure backspace so it acts as it should act
 set backspace=eol,start,indent
@@ -352,10 +355,10 @@ map <c-h> <c-w>h
 
 
 
-"""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""" 
+""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
 "	Sound, Errors, Warnings
 "
-"""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""" 
+""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
 " No annoying sound ot flashing on errors
 set errorbells
 " set noerrorbells		" turn of beeping when errors occure
@@ -365,33 +368,33 @@ set errorbells
 
 
 
-"""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""" 
+""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
 "	Copy & Paste
 "
-"""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""" 
+""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
 set pastetoggle=<F2>
 set clipboard=unnamed
 
 
 
-"""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""" 
+""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
 "	Searching
 "
-"""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""" 
+""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
 set incsearch		" incremental search
 set ignorecase		" Do case insensitive matching
 set smartcase		" Do smart case matching
-"set hlsearch		" highlight search results
+set hlsearch		" highlight search results
 
 " clears the search highlights
 nmap <silent> <leader><space> :nohlsearch<CR>
 
 
 
-"""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""" 
+""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
 "  Indentation
 "
-"""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""" 
+""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
 set copyindent		" copy previous indent on enter
 
 "Indent only if the file is of type cpp,c,java,sh,pl,php,asp
@@ -408,13 +411,13 @@ augroup END
 
 
 
-"""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""" 
+""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
 "  Text and Tabs
 "
-"""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""" 
+""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
 set expandtab		" Use spaces instead of tabs
-set shiftwidth=4	" 1 tab equals 4 spaces
 set smarttab		" Be smart when using tabs
+set shiftwidth=4	" 1 tab equals 4 spaces
 set tabstop=4		" set tab stops ever 4 character spaces
 set nolist          " do not display tabs or ends of lines
 
@@ -430,10 +433,10 @@ set formatoptions=1	" to stop unexpected effects, use :set paste and leave this 
 
 
 
-"""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""" 
+""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
 "  Colors and Fonts
 "
-"""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""" 
+""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
 " To select a font, do ':set guifont=*' and select the font you want to use.
 " Once you're happy with it, do ':set guifont?' and it will output the current
 " setting of the value. Put the the font into your .vimrc via 'set guifont=foo"'
@@ -467,10 +470,10 @@ set ffs=unix,dos,mac
 
 
 
-"""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""" 
+""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
 "  Special Syntax-Highlighting
 "
-"""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""" 
+""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
 " Force the syntax-highlight based on the nature of the file name
 augroup VimSyntax
     " delete any old autocommands in this group
@@ -480,10 +483,10 @@ augroup END
 
 
 
-"""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""" 
+""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
 "   Files, Backups, and Undo
 "
-"""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""" 
+""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
 " disable backup and swap files (they trigger too many events)
 set nobackup
 set nowritebackup
@@ -501,10 +504,10 @@ endif
 
 
 
-"""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""" 
+""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
 "  Abbreviations
 "
-"""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""" 
+""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
 " when in INPUT mode and hit space after typing the abbreviation, Vim will replace it
 iabbrev #c /****************************************************************************/
 iabbrev #v """"""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
@@ -514,10 +517,10 @@ iabbrev ccopy Copyright 2014 Jeffrey C. Irland, all rights reserved.
 
 
 
-"""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""" 
+""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
 "   Mapping Keys
 "
-"""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""" 
+""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
 set timeoutlen=1000		" time in millisec mapping key sequance must complete
 
 " edit my .vimrc file in a new window (so you can update .vimrc on the fly)
@@ -531,6 +534,13 @@ nnoremap <leader>" viw<esc>a"<esc>hbi"<esc>lel
 
 " yank from the cursor to the end of the line, to be consistent with C and D
 nnoremap Y y$
+
+" Removes trailing spaces from the file - http://www.bestofvim.com/tip/trailing-whitespace/
+function! TrimWhiteSpace()
+    %s/\s\+$//e
+endfunction
+nnoremap <silent> <Leader>rts :call TrimWhiteSpace()<CR>
+match ErrorMsg '\s\+$'  " trailing whitespace will be highlighted
 
 " Switch CWD to the directory of the open buffer
 map <leader>cd :cd %:p:h<cr>:pwd<cr>
@@ -550,7 +560,7 @@ cmap w!! w !sudo tee > /dev/null %
 
 
 
-"""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""" 
+""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
 "   Wildmenu Completion
 "
 """"""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
@@ -565,24 +575,24 @@ set wildignore+=*.orig                              " Merge resolution files
 
 
 
-"""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""" 
+""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
 "   Shell Specific
 "
-"""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""" 
+""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
 
 
 
-"""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""" 
+""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
 "   C++ Specific
 "
-"""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""" 
+""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
 
 
 
 """"""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
 "   Python Specific
 "
-"""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""" 
+""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
 "augroup VimPython
 "    " delete any old autocommands in this group
 "    autocmd!
@@ -592,10 +602,10 @@ set wildignore+=*.orig                              " Merge resolution files
 
 
 
-"""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""" 
+""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
 "  Status Line
 "
-"""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""" 
+""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
 " format the status line at the bottom of the Vim window
 " status line broken down into easily include-able segments
 if has('statusline')
@@ -619,7 +629,7 @@ function! InsertStatuslineColor(mode)
         hi statusline guibg=DarkRed ctermfg=1 guifg=Black ctermbg=0
     endif
 endfunction
- 
+
 augroup VimStatusLine
     " delete any old autocommands in this group
     autocmd!
@@ -631,10 +641,10 @@ augroup END
 hi statusline guibg=DarkGrey ctermfg=8 guifg=White ctermbg=15
 
 
-"""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""" 
+""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
 "  Markdown Preview
 "
-"""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""" 
+""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
 " While editing a Markdown document in Vim, preview it in the default browser.
 "
 " Author: Nate Silva
@@ -654,7 +664,7 @@ hi statusline guibg=DarkGrey ctermfg=8 guifg=White ctermbg=15
 function!PreviewMarkdown()
     " ** Configurable settings start here **
     let MARKDOWN_COMMAND = 'markdown'
- 
+
     if has('win32') || has('win64')
         " note important extra pair of double-quotes
         let BROWSER_COMMAND = 'cmd.exe /c start ""'
@@ -663,12 +673,12 @@ function!PreviewMarkdown()
         "let BROWSER_COMMAND = 'chromium-browser'
         let BROWSER_COMMAND = 'google-chrome --enable-plugins'
     endif
- 
+
     " ** End of configurable settings **
- 
+
     silent update
     let output_name = tempname() . '.html'
- 
+
     " Some Markdown implementations, especially the Python one,
     " work best with UTF-8. If our buffer is not in UTF-8, convert
     " it before running Markdown, then convert it back.
@@ -679,7 +689,7 @@ function!PreviewMarkdown()
         set fileencoding=utf-8
         silent update
     endif
- 
+
     " Write the HTML header. Do a CSS reset, followed by setting up
     " some basic styles from YUI, so the output looks nice.
     let file_header = ['<html>', '<head>',
@@ -691,11 +701,11 @@ function!PreviewMarkdown()
         \ '<style>body{padding:20px;}div#container{background-color:#F2F2F2;padding:0 20px;margin:0px;border:solid #D0D0D0 1px;}</style>',
         \ '</head>', '<body>', '<div id="container">']
     call writefile(file_header, output_name)
- 
+
     let md_command = '!' . MARKDOWN_COMMAND . ' "' . expand('%:p') . '" >> "' .
         \ output_name . '"'
     silent exec md_command
- 
+
     if has('win32') || has('win64')
         let footer_name = tempname()
         call writefile(['</div></body></html>'], footer_name)
@@ -705,7 +715,7 @@ function!PreviewMarkdown()
         silent exec '!echo "</div></body></html>" >> "' .
             \ output_name . '"'
     endif
- 
+
     " If we changed the encoding, change it back.
     if original_encoding != 'utf-8' || original_bomb == 1
         if original_bomb == 1
@@ -714,25 +724,25 @@ function!PreviewMarkdown()
         silent exec 'set fileencoding=' . original_encoding
         silent update
     endif
- 
+
     silent exec '!' . BROWSER_COMMAND . ' "' . output_name . '"'
- 
+
     "exec input('Markdown file with be formated in browser.  Press ENTER to continue...')
     "echo
     sleep 500m                  " sleep for 500 miliseconds
     exec delete(output_name)
     redraw!
- 
+
 endfunction
- 
+
 " Map this feature to the key sequence <leader>a or '\a'
 map <leader>a :call PreviewMarkdown()<CR>
 
 
-"""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""" 
+""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
 "  Helper Functions
 "
-"""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""" 
+""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
 " map sort function to key
 vnoremap <leader>s :sort<CR>
 
@@ -772,5 +782,4 @@ if has('win32') || has('win64')
         silent execute '!' . cmd . ' ' . opt . arg1 . ' ' . arg2 . ' > ' . arg3 . eq
     endfunction
 endif
-
 

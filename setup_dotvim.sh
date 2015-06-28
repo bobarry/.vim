@@ -1,5 +1,7 @@
 #!/bin/bash
 
+# Maintainer:   jeffskinnerbox@yahoo.com / www.jeffskinnerbox.me
+# Version:      1.0.2
 
 # Check out these posts:
 #   Using Git and Github to Manage Your Dotfiles - http://blog.smalleycreative.com/tutorials/using-git-and-github-to-manage-your-dotfiles/
@@ -10,22 +12,41 @@
 # the local git repository via: git clone http://github.com/jeffskinnerbox/dotvim.git ~/.vim
 
 
+# directory used to store Vim file
+VIMDIR="~/.vim"
+
+# directory used to store backups
+TMP="~/.vim/tmp"
+TMPDIR="$TMP/old_vim_files_$(date | tr ': ' '_')"
+
+# First check if the target and temporary directory exists, abort if not
+if [[ ! -d $TMP ]]; then
+    echo "Temporary directory $TMP does not exist. Exiting."
+    exit 1
+fi
+
+if [[ ! -d $VIMDIR ]]; then
+    echo "Target directory $VIMDIR does not exist. Exiting."
+    exit 1
+fi
+
 # First make a backup of anything you plan to blow away
-cd ~
-mkdir ~/tmp/old_vim_files
-mv .vim .vimrc .gvimrc ~/tmp/old_vim_files
+cd $VIMDIR
+mkdir $TMPDIR
+cp -ar * $TMPDIR
 
 # make the additional directories that you need
-mkdir -p ~/.vim/autoload ~/.vim/bundle ~/.vim/backup ~/.vim/tmp
+#mkdir -p $VIMDIR/autoload $VIMDIR/bundle $VIMDIR/backup $VIMDIR/tmp
+mkdir -p $VIMDIR/backup $VIMDIR/tmp
 
 # download and install your vim resource file
-curl -Sso ~/.vim/vimrc https://raw.githubusercontent.com/jeffskinnerbox/dotvim/master/vimrc
+curl -Sso $VIMDIR/vimrc https://raw.githubusercontent.com/jeffskinnerbox/dotvim/master/vimrc
 
 # download and install pathogen
-curl -Sso ~/.vim/autoload/pathogen.vim https://raw.githubusercontent.com/tpope/vim-pathogen/master/autoload/pathogen.vim
+curl -Sso $VIMDIR/autoload/pathogen.vim https://raw.githubusercontent.com/tpope/vim-pathogen/master/autoload/pathogen.vim
 
 # now install the other Vim plugins
-cd ~/.vim/bundle
+cd $VIMDIR/bundle
 git clone git://github.com/scrooloose/nerdtree.git
 git clone git://github.com/klen/python-mode.git
 git clone git://github.com/vim-scripts/ScrollColors.git
@@ -33,5 +54,5 @@ git clone git://github.com/scrooloose/nerdcommenter.git
 git clone git://github.com/plasticboy/vim-markdown.git
 
 # create the virtual links to the Vim resource file
-ln -s ~/.vim/vimrc ~/.vimrc
-ln -s ~/.vim/gvimrc ~/.vimrc
+ln -s $VIMDIR/vimrc ~/.vimrc
+ln -s $VIMDIR/gvimrc ~/.vimrc

@@ -71,8 +71,9 @@ Now to push your files to the GitHub repository
 
     git push -u origin master
 
-### To Perform the Initial Replication of .vim Environment on Another Machine
+### To Clone .vim Environment on Another Machine
 Login into the target machine and go to its $HOME
+and clone the Vim environment by execute the following:
 
     cd ~
     git clone http://github.com/jeffskinnerbox/dotvim.git ~/.vim

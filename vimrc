@@ -1,19 +1,68 @@
-" Maintainer:   jeff.irland@gmail.com
-" Version:      1.0.1
+" Maintainer:   jeffskinnerbox@yahoo.com / www.jeffskinnerbox.me
+" Version:      1.0.2
+
+""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
+"   Must Do First Stuff
+"
+"""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
+" FOR DEBUGGING: when bigger than zero, Vim will give messages about what it is doing
+set verbose=0
+
+" Use Vim settings, rather then Vi settings
+" This must be first, because it changes other options as a side effect.
+set nocompatible    " make vim incompatible to vi
+
+
+
+""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
+"  Colors and Fonts
+"
+""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
+" To select a font, do ':set guifont=*' and select the font you want to use.
+" Once you're happy with it, do ':set guifont?' and it will output the current
+" setting of the value. Put the the font into your .vimrc via 'set guifont=foo"'
+
+" Set extra options when running in GUI mode
+if has("gui_running")           " settings for GVim
+	set t_Co=256
+	set guitablabel=%M\ %t
+    set guioptions-=T           " remove the tool bar
+    set guioptions-=r
+    set guioptions-=L
+    set guioptions+=a
+	set guioptions+=e
+    set guioptions-=m
+    colorscheme jellybeans      "load color scheme {name} by searches 'runtimepath' for the file "colors/{name}.vim"
+    set guifont=Inconsolata\ 10
+else                            " settings for Vim
+    set t_Co=256
+    colorscheme jellybeans
+    set guifont=Consolas:h10:cANSI
+endif
+
+"execute 'set colorcolumn=' . join(range(81,335), ',')  " set all lines after columns 80 to another color
+set colorcolumn=80          	" puts a single color line at the column given
+highlight ColorColumn ctermbg=lightgrey guibg=lightgrey
+
+" Set utf8 as standard encoding and en_US as the standard language
+set encoding=utf8
+
+" Use Unix as the standard file type
+set ffs=unix,dos,mac
+
+
 
 """"""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
 "   General Stuff
 "
 """""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
-
-" FOR DEBUGGING: when bigger than zero, Vim will give messages about what it is doing
-set verbose=0
-
 " default leader is '\', but many people prefer ','
+" The mapleader has to be set before starts loading all the plugins.
 let mapleader = ","
 let g:mapleader = ","
 
-" automatic reload of .vimrc after it's saved (great for when your editing .vimrc itself) - http://www.bestofvim.com/tip/auto-reload-your-vimrc/
+" automatic reload of .vimrc after it's saved
+" great for when your editing .vimrc itself - http://www.bestofvim.com/tip/auto-reload-your-vimrc/
 augroup reload_vimrc
     autocmd!
     autocmd BufWritePost $MYVIMRC source $MYVIMRC
@@ -28,37 +77,27 @@ else
     behave xterm                            " Xterm behavior
 endif
 
-set nocompatible    " make vim incompatible to vi
-
-set number			" enable line numbers
-set numberwidth=4	" space provided for line numbering
-
-set nocompatible	" not compatible with the old-fashion vi mode
 set bs=2			" allow backspacing over everything in insert mode
 set autoread		" auto read when file is changed from outside
-set hidden			" buffers can exist in background
-
-if has('cmdline_info')
-    set ruler                   " always show the current position
-    set rulerformat=%30(%=\:b%n%y%m%r%w\ %l,%c%V\ %P%) " a ruler on steroids
-    set showcmd                 " show partial commands in status line and selected characters/lines in visual mode
-endif
-
-" highlight current line, background color
-set cursorline
-hi cursorline guibg=#5c5c5c
-hi CursorColumn guibg=#5c5c5c
-
-" use colored highlighting for file types recognized
-"syntax on			" Enable syntax highlighting
-"filetype on			" Enable filetype detection
-"filetype indent on	" Enable filetype-specific indenting
+set hidden			" buffers can exist in background - http://items.sjbach.com/319/configuring-vim-right
 
 set history=200		" sets how many command line history VIM has to remember
 set undolevels=200  " use many muchos levels of undo
 
-" improve the display of line wraps - http://www.bestofvim.com/tip/better-line-wraps/
-set showbreak=↪
+
+
+""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
+"	File Type Highlighting
+"
+""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
+" enables Vim to show parts of the text in another font or color
+syntax on			" Enable syntax highlighting
+
+" filetype enable type-specific configuration, such as knowledge of syntax and indentation
+filetype on			" Enable filetype detection
+filetype plugin on  " enable loading the plugin files for specific file types
+filetype indent on	" Enable filetype-specific indenting
+
 
 
 """"""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
@@ -96,10 +135,9 @@ augroup VimNERDTree
     autocmd BufEnter * if (winnr("$") == 1 && exists("b:NERDTreeType") && b:NERDTreeType == "primary") | q | endif
 augroup END
 
-map <leader>e :NERDTreeFind<CR>
-
-" toggle NERDTree on or off
-nmap <leader>nt :NERDTreeToggle<CR>
+" controlling NERDTree
+map <leader>e :NERDTreeFind<cr>         " command to invoke NERDTreeFind
+nmap <leader>nt :NERDTreeToggle<cr>     " toggle NERDTree on or off
 
 "--------------------------------- Python-Mode ---------------------------------
 " to install
@@ -229,6 +267,17 @@ set viminfo^=%
 
 
 
+
+""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
+"  Text Scrolling
+"
+""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
+set scrolloff=8         " minimal number of screen lines to keep above and below the cursor.
+set sidescrolloff=15    " minimal number of screen columns left & right of the cursor if 'nowrap' is set
+set sidescroll=1        " minimal number of columns to scroll horizontally.
+
+
+
 """"""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
 "  Folding
 "
@@ -263,7 +312,7 @@ set nofoldenable    " don't fold by default
 
 
 """"""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
-"  Window Tabs
+"  Window Menu Tabs
 "
 """"""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
 " Useful mappings for managing tabs
@@ -277,7 +326,7 @@ map <leader>tm :tabmove
 map <leader>te :tabedit <c-r>=expand("%:p:h")<cr>/
 
 " color the tabs
-hi TabLineFill ctermfg=Black ctermbg=LightGray
+hi TabLineFill ctermfg=Black ctermbg=Gray
 hi TabLine ctermfg=Black ctermbg=Gray
 hi TabLineSel ctermfg=DarkGreen ctermbg=Gray
 
@@ -314,19 +363,11 @@ map <leader>sp :setlocal spell!<cr>
 "	VIM User Interface
 "
 """"""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
-" Vim will show a block cursor in normal mode and a line cursor in insert mode
-let &t_ti.="\e[1 q"
-let &t_SI.="\e[5 q"
-let &t_EI.="\e[1 q"
-let &t_te.="\e[0 q"
-
-" determines the number of context lines you would like to see above and below the cursor to 999 to center cursor
-set scrolloff=7
 
 set mouse=a		" Enable mouse usage; to paste, press shift while selecting with the mouse
 
 " Height of the command bar
-set cmdheight=2
+set cmdheight=1
 
 " Configure backspace so it acts as it should act
 set backspace=eol,start,indent
@@ -338,14 +379,6 @@ set showcmd			" Show (partial) commands in status line
 
 set showmatch		" Show matching brackets when text indicator is over them
 set mat=2			" tenths of a second to blink when matching brackets
-set title		    "Show info in the window title
-
-augroup VimUI
-    " delete any old autocommands in this group
-    autocmd!
-    " format the string that "set title" will display at top of window
-    autocmd BufEnter * let &titlestring = hostname() . " Vim Editor: " . expand("%:p")
-augroup END
 
 " bind Ctrl+<movement> keys to move around windows, instead of using Ctrl+w+<movement>
 map <c-j> <c-w>j
@@ -356,11 +389,28 @@ map <c-h> <c-w>h
 
 
 """"""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
+"	Set Terminal Title
+"
+""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
+set title		    "Show info in the window title
+
+" execute after entering a buffer and set the title of the terminal
+augroup VimUI
+    " delete any old autocommands in this group
+    autocmd!
+    " format the string that "set title" will display at top of window
+    autocmd BufEnter * let &titlestring = hostname() . " Vim Editor: " . expand("%:p")
+augroup END
+
+
+
+""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
 "	Sound, Errors, Warnings
 "
 """"""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
 " No annoying sound ot flashing on errors
 set errorbells
+set visualbell          " see a brief window flash on error
 " set noerrorbells		" turn of beeping when errors occure
 " set novisualbell		" turn off screen flashing when errors occure
 " set t_vb=				" If 't_vb' is cleared, Vim will never flash the screen
@@ -378,21 +428,22 @@ set clipboard=unnamed
 
 
 """"""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
-"	Searching
+"	Text Searching
 "
 """"""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
-set incsearch		" incremental search
-set ignorecase		" Do case insensitive matching
-set smartcase		" Do smart case matching
-set hlsearch		" highlight search results
+set incsearch       " find the next match as we type the search
+set hlsearch        " highlight searches by default
+set ignorecase      " ignore case when searching...
+set smartcase       " ...unless we type a capital
 
+" if the search term highlighting gets annoying, set a key to switch it off temporarily
 " clears the search highlights
-nmap <silent> <leader><space> :nohlsearch<CR>
+nmap <silent> <leader>n :silent :nohlsearch<cr>
 
 
 
 """"""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
-"  Indentation
+"  Text Indentation
 "
 """"""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
 set copyindent		" copy previous indent on enter
@@ -419,54 +470,31 @@ set expandtab		" Use spaces instead of tabs
 set smarttab		" Be smart when using tabs
 set shiftwidth=4	" 1 tab equals 4 spaces
 set tabstop=4		" set tab stops ever 4 character spaces
-set nolist          " do not display tabs or ends of lines
 
-" Cool tab completion stuff
-set wildmenu
-set wildmode=list:longest,full
-
-set wrap			" wrap lines when they are larger than the window size
-set wrapmargin=4	" number of characters from right window border when wrapping starts
-set tw=500			" Line break on 500 characters
-set lbr
-set formatoptions=1	" to stop unexpected effects, use :set paste and leave this mode via :set nopaste
+" toggle between showing and hiding hidden characters
+nmap <leader>hc :set list!<cr>
 
 
 
 """"""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
-"  Colors and Fonts
+"  Line Wrapping and Breaking
 "
 """"""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
-" To select a font, do ':set guifont=*' and select the font you want to use.
-" Once you're happy with it, do ':set guifont?' and it will output the current
-" setting of the value. Put the the font into your .vimrc via 'set guifont=foo"'
+" improve the display of line wraps - http://www.bestofvim.com/tip/better-line-wraps/
+" http://www.tagwith.com/question_1169785_vim-change-lines-font-color-based-upon-first-character-in-the-line
+"set nowrap
+set wrap			" wrap lines when they are larger than the window size
+set wrapmargin=4	" number of characters from right window border when wrapping starts
 
-" Set extra options when running in GUI mode
-if has("gui_running")           " settings for GVim
-	set t_Co=256
-	set guitablabel=%M\ %t
-    set guioptions-=T           " remove the tool bar
-    set guioptions-=r
-    set guioptions-=L
-    set guioptions+=a
-	set guioptions+=e
-    set guioptions-=m
-    colorscheme jellybeans
-    set guifont=Inconsolata\ 10
-else                            " settings for Vim
-    set t_Co=256
-    colorscheme jellybeans
-    set guifont=Consolas:h10:cANSI
-endif
+" put string at the start of lines that have been wrapped
+set showbreak=↪
+syntax match mysyntaxXLine /^↪.*$/
+highlight link mysyntaxXLine Error
 
-"execute 'set colorcolumn=' . join(range(81,335), ',')  " set all lines after columns 80 to another color
-set colorcolumn=80          	" puts a single color line at the column given
+set linebreak
+set textwidth=500	" Line break on 500 characters
+set formatoptions=1	" to stop unexpected effects, use :set paste and leave this mode via :set nopaste
 
-" Set utf8 as standard encoding and en_US as the standard language
-set encoding=utf8
-
-" Use Unix as the standard file type
-set ffs=unix,dos,mac
 
 
 
@@ -513,7 +541,7 @@ iabbrev #c /********************************************************************
 iabbrev #v """"""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
 iabbrev #s #-----------------------------------------------------------------------------
 iabbrev @@ jeff.irland@gmail.net
-iabbrev ccopy Copyright 2014 Jeffrey C. Irland, all rights reserved.
+iabbrev ccopy Copyright 2015 Jeffrey C. Irland, all rights reserved.
 
 
 
@@ -535,13 +563,6 @@ nnoremap <leader>" viw<esc>a"<esc>hbi"<esc>lel
 " yank from the cursor to the end of the line, to be consistent with C and D
 nnoremap Y y$
 
-" Removes trailing spaces from the file - http://www.bestofvim.com/tip/trailing-whitespace/
-function! TrimWhiteSpace()
-    %s/\s\+$//e
-endfunction
-nnoremap <silent> <Leader>rts :call TrimWhiteSpace()<CR>
-match ErrorMsg '\s\+$'  " trailing whitespace will be highlighted
-
 " Switch CWD to the directory of the open buffer
 map <leader>cd :cd %:p:h<cr>:pwd<cr>
 
@@ -561,11 +582,38 @@ cmap w!! w !sudo tee > /dev/null %
 
 
 """"""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
-"   Wildmenu Completion
+"   White Space
 "
 """"""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
+" do not display tabs, ends of lines, or other hidden characters
+set nolist
+
+" toggle on/off tabs and trailing whitespace
+set listchars=tab:>-,trail:·,eol:$
+nmap <silent> <leader>s :set nolist!<cr>
+
+" automatically highlight trailing whitespace
+match ErrorMsg '\s\+$'
+
+" Removes trailing spaces from the file - http://www.bestofvim.com/tip/trailing-whitespace/
+function! TrimWhiteSpace()
+    %s/\s\+$//e
+endfunction
+nnoremap <silent> <Leader>tws :call TrimWhiteSpace()<cr>
+
+
+
+""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
+"  Command Completion
+"
+""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
+" pressing <TAB> in command mode will choose the first possible completion
+" this lets you see what your other options are
 set wildmenu
-set wildmode=list:longest
+
+" have the completion behave similarly to a shell (i.e. complete only up to the point of ambiguity)
+set wildmode=list:longest,full
+
 set wildignore+=.hg,.git,.svn                       " Version Controls
 set wildignore+=*.jpg,*.bmp,*.gif,*.png,*.jpeg      " Binary Imgs
 set wildignore+=*.o,*.obj,*.exe,*.dll,*.manifest    " Compiled Object files
@@ -599,6 +647,58 @@ set wildignore+=*.orig                              " Merge resolution files
 "    " comment out a line
 "    autocmd FileType python nnoremap <buffer> <leader>c I#<esc>
 "augroup END
+
+
+
+""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
+"  Line Numbering
+"
+""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
+set number			" enable line numbers
+set numberwidth=4	" space provided for line numbering
+
+" show the line and column number of the cursor position
+if has('cmdline_info')
+    set ruler                   " always show the current position
+    set rulerformat=%30(%=\:b%n%y%m%r%w\ %l,%c%V\ %P%) " a ruler on steroids
+    set showcmd                 " show partial commands in status line and selected characters/lines in visual mode
+endif
+
+
+
+""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
+"  Cursor Position, Color, Shape
+"
+""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
+" Vim allows the cursor shape, blink rate, and color to be customized
+" see http://vim.wikia.com/wiki/Configuring_the_cursor
+
+" highlight current line and column to contrast with background color
+" Could make screen redrawing slower.
+set cursorline
+highlight cursorline guibg=black
+highlight cursorcolumn guibg=black
+
+" Vim will use a block cursor in normal, command-line and visual mode
+" n-v-c = normal mode, or visual selection mode, or command mode (colon command)
+highlight Cursor guifg=black guibg=white
+set guicursor=n-v-c:block-Cursor-blinkwait700-blinkon400-blinkoff250
+
+" Vim will use a line cursor (30% of character width) insert mode
+" i-ci = insert mode, command line insert mode (colon command)
+highlight iCursor guifg=white guibg=red
+set guicursor=i-ci:ver30-iCursor-blinkwait300-blinkon200-blinkoff150
+
+" The above fully works in the GUI.
+" In an MSDOS or Win32 console, only the height of the cursor can be changed.
+" This can be done by specifying a block cursor, or a percentage for a vertical or
+" horizontal cursor.  For a console the 't_SI' and 't_EI' escape sequences are used.
+" It is possible to change the cursor color and style in the terminal if it understands
+" the following escape sequences. Not all terminals support this, but xterm, rxvt and Terminator do.
+let &t_ti.="\e[1 q"
+let &t_te.="\e[0 q"
+let &t_SI.="\e[5 q"
+let &t_EI.="\e[1 q"
 
 
 
@@ -736,7 +836,7 @@ function!PreviewMarkdown()
 endfunction
 
 " Map this feature to the key sequence <leader>a or '\a'
-map <leader>a :call PreviewMarkdown()<CR>
+map <leader>a :call PreviewMarkdown()<cr>
 
 
 """"""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
@@ -744,7 +844,7 @@ map <leader>a :call PreviewMarkdown()<CR>
 "
 """"""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
 " map sort function to key
-vnoremap <leader>s :sort<CR>
+vnoremap <leader>s :sort<cr>
 
 " Returns true if paste mode is enabled
 function! HasPaste()

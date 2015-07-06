@@ -52,6 +52,8 @@ git clone git://github.com/klen/python-mode.git
 git clone git://github.com/vim-scripts/ScrollColors.git
 git clone git://github.com/scrooloose/nerdcommenter.git
 git clone git://github.com/plasticboy/vim-markdown.git
+git clone git://github.com/smancill/conky-syntax.vim.git
+git clone git://github.com/sudar/vim-arduino-syntax
 
 # create the virtual links to the Vim resource file
 ln -s $VIMDIR/vimrc ~/.vimrc

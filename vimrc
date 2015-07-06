@@ -1,5 +1,5 @@
 " Maintainer:   jeffskinnerbox@yahoo.com / www.jeffskinnerbox.me
-" Version:      1.0.2
+" Version:      1.0.3
 
 """"""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
 "   Must Do First Stuff
@@ -11,6 +11,46 @@ set verbose=0
 " Use Vim settings, rather then Vi settings
 " This must be first, because it changes other options as a side effect.
 set nocompatible    " make vim incompatible to vi
+
+
+
+""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
+"   General Stuff
+"
+"""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
+" time in milliseconds that is waited for a key code or mapped key sequence to complete
+set timeoutlen=1000
+
+" default leader is '\', but many people prefer ','
+" The mapleader has to be set before starts loading all the plugins.
+let mapleader = ","
+let g:mapleader = ","
+
+" indicates a fast terminal connect and gives smoother changes
+set ttyfast
+
+" automatic reload of .vimrc after it's saved, but note that this will not unmap keys
+" great for when your editing .vimrc itself - http://www.bestofvim.com/tip/auto-reload-your-vimrc/
+augroup reload_vimrc
+    autocmd!
+    autocmd BufWritePost $MYVIMRC source $MYVIMRC
+augroup END
+
+" Set behavior for mouse and selection.  Valid arguments are mswin and xterm
+if has('win32') || has('win64')
+    source $VIMRUNTIME/vimrc_example.vim    " contains example settings that may be useful
+    source $VIMRUNTIME/mswin.vim            " map a few keys to the MS-Windows cut/copy/paste commands
+    behave mswin                            " MS-Windows behavior (work more or less like a typical Windows editor)
+else
+    behave xterm                            " Xterm behavior
+endif
+
+set bs=2			" allow backspacing over everything in insert mode
+set autoread		" auto read when file is changed from outside
+set hidden			" buffers can exist in background - http://items.sjbach.com/319/configuring-vim-right
+
+set history=200		" sets how many command line history VIM has to remember
+set undolevels=200  " use many muchos levels of undo
 
 
 
@@ -49,40 +89,6 @@ set encoding=utf8
 
 " Use Unix as the standard file type
 set ffs=unix,dos,mac
-
-
-
-""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
-"   General Stuff
-"
-"""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
-" default leader is '\', but many people prefer ','
-" The mapleader has to be set before starts loading all the plugins.
-let mapleader = ","
-let g:mapleader = ","
-
-" automatic reload of .vimrc after it's saved
-" great for when your editing .vimrc itself - http://www.bestofvim.com/tip/auto-reload-your-vimrc/
-augroup reload_vimrc
-    autocmd!
-    autocmd BufWritePost $MYVIMRC source $MYVIMRC
-augroup END
-
-" Set behavior for mouse and selection.  Valid arguments are mswin and xterm
-if has('win32') || has('win64')
-    source $VIMRUNTIME/vimrc_example.vim    " contains example settings that may be useful
-    source $VIMRUNTIME/mswin.vim            " map a few keys to the MS-Windows cut/copy/paste commands
-    behave mswin                            " MS-Windows behavior (work more or less like a typical Windows editor)
-else
-    behave xterm                            " Xterm behavior
-endif
-
-set bs=2			" allow backspacing over everything in insert mode
-set autoread		" auto read when file is changed from outside
-set hidden			" buffers can exist in background - http://items.sjbach.com/319/configuring-vim-right
-
-set history=200		" sets how many command line history VIM has to remember
-set undolevels=200  " use many muchos levels of undo
 
 
 
@@ -269,12 +275,37 @@ set viminfo^=%
 
 
 """"""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
-"  Text Scrolling
+"  Text Scrolling and Paging Controls
 "
 """"""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
+" text scrolling behaver
 set scrolloff=8         " minimal number of screen lines to keep above and below the cursor.
 set sidescrolloff=15    " minimal number of screen columns left & right of the cursor if 'nowrap' is set
 set sidescroll=1        " minimal number of columns to scroll horizontally.
+
+" the paging behavior defaults for vim
+" <Ctrl>b - Move back one full screen
+" <Ctrl>f - Move forward one full screen
+" <Ctrl>d - Move forward 1/2 screen
+" <Ctrl>u - Move back (up) 1/2 screen
+
+" Mapping keys in Vim - http://vim.wikia.com/wiki/Mapping_keys_in_Vim_-_Tutorial_%28Part_1%29
+" map Alt-Arrow-Keys as they would be used in a Chromebook
+map  <Alt><Up> <c-b>
+map  <Alt><Down> <c-f>
+" the above doesn't work yet
+
+
+
+""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
+"  Window Navigation
+"
+""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
+" bind Ctrl+<movement> keys to move around windows, instead of using Ctrl+w+<movement>
+map <c-j> <c-w>j
+map <c-k> <c-w>k
+map <c-l> <c-w>l
+map <c-h> <c-w>h
 
 
 
@@ -380,12 +411,6 @@ set showcmd			" Show (partial) commands in status line
 set showmatch		" Show matching brackets when text indicator is over them
 set mat=2			" tenths of a second to blink when matching brackets
 
-" bind Ctrl+<movement> keys to move around windows, instead of using Ctrl+w+<movement>
-map <c-j> <c-w>j
-map <c-k> <c-w>k
-map <c-l> <c-w>l
-map <c-h> <c-w>h
-
 
 
 """"""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
@@ -405,11 +430,10 @@ augroup END
 
 
 """"""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
-"	Sound, Errors, Warnings
+"	Sound and Other Effects for Errors / Warnings
 "
 """"""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
-" No annoying sound ot flashing on errors
-set errorbells
+set errorbells          " ring bell on error
 set visualbell          " see a brief window flash on error
 " set noerrorbells		" turn of beeping when errors occure
 " set novisualbell		" turn off screen flashing when errors occure
@@ -419,11 +443,27 @@ set visualbell          " see a brief window flash on error
 
 
 """"""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
-"	Copy & Paste
+"  Clipboard, Copy & Paste
 "
 """"""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
-set pastetoggle=<F2>
+" Vim lets us access the system clipboard using the quoteplus register, "+.
+" http://vimcasts.org/episodes/accessing-the-system-clipboard-from-vim/
+" http://vim.wikia.com/wiki/Accessing_the_system_clipboard
+
+" "+y - if you want to yank text from a Vim buffer into the system clipboard
+" "+p - paste text from the system clipboard into your Vim buffer
+
+" use th system clipboard for all yank, delete, change, put operations that don't have  a register
 set clipboard=unnamed
+
+" This will make <F10> start paste mode and <F11> stop paste mode.
+" Note that typing <F10> in paste mode inserts '<F10>', since in paste
+" mode everything is inserted literally, except the 'pastetoggle' key sequence.
+"map <F10> :set paste<CR>
+"map <F11> :set nopaste<CR>
+"imap <F10> <C-O>:set paste<CR>
+"imap <F11> <nop>
+"set pastetoggle=<F11>
 
 
 
@@ -434,7 +474,7 @@ set clipboard=unnamed
 set incsearch       " find the next match as we type the search
 set hlsearch        " highlight searches by default
 set ignorecase      " ignore case when searching...
-set smartcase       " ...unless we type a capital
+set smartcase       " ...unless you type a capital
 
 " if the search term highlighting gets annoying, set a key to switch it off temporarily
 " clears the search highlights
@@ -497,7 +537,6 @@ set formatoptions=1	" to stop unexpected effects, use :set paste and leave this 
 
 
 
-
 """"""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
 "  Special Syntax-Highlighting
 "
@@ -532,24 +571,20 @@ endif
 
 
 
+
 """"""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
-"  Abbreviations
+"  Special Key Mappings
 "
 """"""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
-" when in INPUT mode and hit space after typing the abbreviation, Vim will replace it
-iabbrev #c /****************************************************************************/
-iabbrev #v """"""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
-iabbrev #s #-----------------------------------------------------------------------------
-iabbrev @@ jeff.irland@gmail.net
-iabbrev ccopy Copyright 2015 Jeffrey C. Irland, all rights reserved.
+" map sort function to key
+vnoremap <leader>s :sort<cr>
 
-
-
-""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
-"   Mapping Keys
-"
-""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
-set timeoutlen=1000		" time in millisec mapping key sequance must complete
+" TiddlyWiki uses the Esc key
+" Avoid the escape key - http://vim.wikia.com/wiki/Avoid_the_escape_key
+" the defaults exit from insert mode mapping for vim
+" <Ctrl>[ - equivalent to <Esc>
+"imap <C-I> <Esc>        " press i to enter and <Ctrl>i to exit from insert mode
+" doesn't work for some reason, can't insert tab for some reason
 
 " edit my .vimrc file in a new window (so you can update .vimrc on the fly)
 nnoremap <leader>ev :split $MYVIMRC<cr>
@@ -624,33 +659,6 @@ set wildignore+=*.orig                              " Merge resolution files
 
 
 """"""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
-"   Shell Specific
-"
-""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
-
-
-
-""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
-"   C++ Specific
-"
-""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
-
-
-
-""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
-"   Python Specific
-"
-""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
-"augroup VimPython
-"    " delete any old autocommands in this group
-"    autocmd!
-"    " comment out a line
-"    autocmd FileType python nnoremap <buffer> <leader>c I#<esc>
-"augroup END
-
-
-
-""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
 "  Line Numbering
 "
 """"""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
@@ -689,7 +697,15 @@ set guicursor=n-v-c:block-Cursor-blinkwait700-blinkon400-blinkoff250
 highlight iCursor guifg=white guibg=red
 set guicursor=i-ci:ver30-iCursor-blinkwait300-blinkon200-blinkoff150
 
-" The above fully works in the GUI.
+"If you're in a terminal emulator like st or rxvt, Vim cannot change the color of your cursor; it will always be the color your terminal application decides to make it. Only the graphical version of Vim is able to change the color of your cursor.
+"You can change your cursor color through your terminal configuration though.
+"
+"Some ~/.Xdefaults / ~/.Xresources examples:
+"
+"XTerm*cursorColor: #FFFFFF
+"URxvt.cursorColor: white
+"
+" The above fully works in the GUI gvim, but not vim.
 " In an MSDOS or Win32 console, only the height of the cursor can be changed.
 " This can be done by specifying a block cursor, or a percentage for a vertical or
 " horizontal cursor.  For a console the 't_SI' and 't_EI' escape sequences are used.
@@ -739,6 +755,7 @@ augroup END
 
 " default the statusline to green when entering Vim
 hi statusline guibg=DarkGrey ctermfg=8 guifg=White ctermbg=15
+
 
 
 """"""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
@@ -839,13 +856,51 @@ endfunction
 map <leader>a :call PreviewMarkdown()<cr>
 
 
+
+""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
+"   Shell Specific
+"
+""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
+
+
+
+""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
+"   C++ Specific
+"
+""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
+
+
+
+""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
+"   Python Specific
+"
+""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
+"augroup VimPython
+"    " delete any old autocommands in this group
+"    autocmd!
+"    " comment out a line
+"    autocmd FileType python nnoremap <buffer> <leader>c I#<esc>
+"augroup END
+
+
+
+""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
+"  Abbreviations
+"
+""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
+" when in INPUT mode and hit space after typing the abbreviation, Vim will replace it
+iabbrev #c /****************************************************************************/
+iabbrev #v """"""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
+iabbrev #s #-----------------------------------------------------------------------------
+iabbrev @@ jeff.irland@gmail.net
+iabbrev ccopy Copyright 2015 Jeffrey C. Irland, all rights reserved.
+
+
+
 """"""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
 "  Helper Functions
 "
 """"""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
-" map sort function to key
-vnoremap <leader>s :sort<cr>
-
 " Returns true if paste mode is enabled
 function! HasPaste()
   if &paste
@@ -882,4 +937,3 @@ if has('win32') || has('win64')
         silent execute '!' . cmd . ' ' . opt . arg1 . ' ' . arg2 . ' > ' . arg3 . eq
     endfunction
 endif
-

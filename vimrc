@@ -1,5 +1,5 @@
 " Maintainer:   jeffskinnerbox@yahoo.com / www.jeffskinnerbox.me
-" Version:      1.0.3
+" Version:      1.0.4
 
 """"""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
 "   Must Do First Stuff
@@ -31,9 +31,11 @@ set ttyfast
 
 " automatic reload of .vimrc after it's saved, but note that this will not unmap keys
 " great for when your editing .vimrc itself - http://www.bestofvim.com/tip/auto-reload-your-vimrc/
+" this particular method watches for the many variations of Vim config filenames
+" so that it's compatible with Terminal Vim, GUI Vim, Windows Vim, etc.
 augroup reload_vimrc
     autocmd!
-    autocmd BufWritePost $MYVIMRC source $MYVIMRC
+    autocmd BufWritePost .vimrc,_vimrc,vimrc,.gvimrc,_gvimrc,gvimrc source $MYVIMRC | if has('gui_running') | source $MYGVIMRC | endif
 augroup END
 
 " Set behavior for mouse and selection.  Valid arguments are mswin and xterm
@@ -63,8 +65,8 @@ set undolevels=200  " use many muchos levels of undo
 " setting of the value. Put the the font into your .vimrc via 'set guifont=foo"'
 
 " Set extra options when running in GUI mode
-if has("gui_running")           " settings for GVim
-	set t_Co=256
+if has("gui_running")           " settings for GUI Vim (i.e. gvim)
+	set t_Co=256                " tells Vim the number of colors available
 	set guitablabel=%M\ %t
     set guioptions-=T           " remove the tool bar
     set guioptions-=r
@@ -72,11 +74,11 @@ if has("gui_running")           " settings for GVim
     set guioptions+=a
 	set guioptions+=e
     set guioptions-=m
-    colorscheme jellybeans      "load color scheme {name} by searches 'runtimepath' for the file "colors/{name}.vim"
+    colorscheme jellybeans      "load color scheme {name} by searches 'runtimepath' for the file 'colors/{name}.vim'
     set guifont=Inconsolata\ 10
-else                            " settings for Vim
-    set t_Co=256
-    colorscheme jellybeans
+else                            " settings for Terminal Vim (i.e. vim)
+	set t_Co=256                " tells Vim the number of colors available
+    colorscheme jellybeans      "load color scheme {name} by searches 'runtimepath' for the file 'colors/{name}.vim'
     set guifont=Consolas:h10:cANSI
 endif
 
@@ -270,7 +272,6 @@ augroup END
 
 " remember info about open buffers on close
 set viminfo^=%
-
 
 
 
@@ -568,7 +569,6 @@ else
     set backupdir=~/.vim/backup                             " for Linux
     set directory=~/.vim/tmp                                " for Linux
 endif
-
 
 
 
@@ -937,3 +937,28 @@ if has('win32') || has('win64')
         silent execute '!' . cmd . ' ' . opt . arg1 . ' ' . arg2 . ' > ' . arg3 . eq
     endfunction
 endif
+
+
+
+""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
+"  Tester Functions
+"
+""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
+" a test to show if Vim can in fact output 256 colors 
+" execute the script by typing ':VimColorTest'
+" https://emerg3nc3.wordpress.com/2012/07/28/full-256-color-support-for-vim-andor-xterm-on-ubuntu-12-04/
+function! VimColorTest(outfile, fgend, bgend)
+  let result = []
+  for fg in range(a:fgend)
+    for bg in range(a:bgend)
+      let kw = printf('%-7s', printf('c_%d_%d', fg, bg))
+      let h = printf('hi %s ctermfg=%d ctermbg=%d', kw, fg, bg)
+      let s = printf('syn keyword %s %s', kw, kw)
+      call add(result, printf('%-32s | %s', h, s))
+    endfor
+  endfor
+  call writefile(result, a:outfile)
+  execute 'edit '.a:outfile
+  source %
+endfunction
+command! VimColorTest call VimColorTest('vim-color-test.tmp', 1, 256)

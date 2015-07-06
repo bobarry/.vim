@@ -7,6 +7,27 @@ via [git][01] and [GitHub][02].  For more information, check out these posts:
 
 ===
 
+### Testing Terminal Colors
+Both of those scripts
+`256colors.pl`, `colortest.pl`
+will test for the terminal’s 256 color capabilities.
+In other words, they both tell your terminal to turn on 256 colors for the test.
+Essentially that means that xterm was compiled or installed properly
+on your operating system with the 256 color configuration options.
+However, that does not mean that your terminal is running at 256 colors all the time.
+Xterm 256 color capabilities might be installed,
+but they are not always enabled by default.
+This is why if you try to run a 256 color scheme in vim via the `set t_Co=256` setting
+in your .vimrc file.
+If you want your terminal to always have 256 color support enabled by default,
+then put `export TERM="xterm-256color"` in your `.bashrc` file.
+
+Also, the `.vimrc` file also has tester function to validate if Vim
+can infact support 256 colors.
+See the function called `VimColorTest`.
+
+===
+
 Using Vim's scripting language (and a great deal of insight and tools from others),
 I have setup Vim on my local machine to be an effective development environment
 for my needs.  Using GitHub, I can replicate this Vim environment across the
@@ -30,10 +51,10 @@ Store your existing .vimrc and .gvimrc in the .vim directory
     ln -s ~/.vim/gvimrc ~/.gvimrc
 
 Change to the .vim directory, and initialize it as a git repository
- 
+
     cd ~/.vim
     git init
- 
+
 Create a README.md file, add all the files, and make initial comment
 
     <make a README file>
@@ -48,7 +69,7 @@ Goto GitHub and create the new repository
 
 ### Loading the GitHub Repository for the First Time
 Within the ~.vim directory, use git to load the files to GitHub
- 
+
     git remote add origin https://github.com/jeffskinnerbox/dotvim.git
     git push -u origin master
 

@@ -2,6 +2,7 @@
 ### ---------- Project Specific ---------- ###
 tmp/**
 backup/**
+vim-color-test.tmp
 
 ### ---------- General ---------- ###
 

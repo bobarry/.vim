@@ -57,6 +57,20 @@ set undolevels=200  " use many muchos levels of undo
 
 
 """"""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
+"  Persistent Undo
+"
+"""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
+" Once you quit Vim, the undo history for that file is gone.
+" Keep undo history across sessions by storing it in a file
+if has('persistent_undo')
+    silent !mkdir ~/.vim/backup > /dev/null 2>&1
+    set undodir=~/.vim/backup
+    set undofile        " Maintain undo history between sessions
+endif
+
+
+
+""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
 "  Colors and Fonts
 "
 """"""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
@@ -330,8 +344,10 @@ map <c-h> <c-w>h
 "   zE      deletes all folds.
 "   [z      move to start of open fold.
 "   ]z      move to end of open fold.
-set foldcolumn=2    " Add a bit extra margin to the left when folding
-set nofoldenable    " don't fold by default
+set foldcolumn=2        " Add a bit extra margin to the left when folding
+set foldmethod=indent   " fold based on indent
+set foldnestmax=3       " deepest fold is 3 levels
+set nofoldenable        " don't fold by default
 
 "augroup VimFolding
 "    " delete any old autocommands in this group
@@ -408,7 +424,7 @@ set whichwrap+=<,>,h,l
 set lazyredraw		" Don't redraw while executing macros
 set magic			" For regular expressions turn magic on
 set showcmd			" Show (partial) commands in status line
-
+set showmode        " Show current mode down the bottom
 set showmatch		" Show matching brackets when text indicator is over them
 set mat=2			" tenths of a second to blink when matching brackets
 
@@ -644,7 +660,7 @@ nnoremap <silent> <Leader>tws :call TrimWhiteSpace()<cr>
 """"""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
 " pressing <TAB> in command mode will choose the first possible completion
 " this lets you see what your other options are
-set wildmenu
+set wildmenu        " enable ctrl-n and ctrl-p to scroll thru matches
 
 " have the completion behave similarly to a shell (i.e. complete only up to the point of ambiguity)
 set wildmode=list:longest,full

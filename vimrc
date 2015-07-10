@@ -313,9 +313,77 @@ map  <Alt><Down> <c-f>
 
 
 """"""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
-"  Window Navigation
+"  Cursor Position, Color, Shape
 "
 """"""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
+" Vim allows the cursor shape, blink rate, and color to be customized
+" see http://vim.wikia.com/wiki/Configuring_the_cursor
+
+" highlight current line and column to contrast with background color
+" Could make screen redrawing slower.
+set cursorline
+highlight cursorline guibg=black
+highlight cursorcolumn guibg=black
+
+" Vim will use a block cursor in normal, command-line and visual mode
+" n-v-c = normal mode, or visual selection mode, or command mode (colon command)
+highlight Cursor guifg=black guibg=white
+set guicursor=n-v-c:block-Cursor-blinkwait700-blinkon400-blinkoff250
+
+" Vim will use a line cursor (30% of character width) insert mode
+" i-ci = insert mode, command line insert mode (colon command)
+highlight iCursor guifg=white guibg=red
+set guicursor=i-ci:ver30-iCursor-blinkwait300-blinkon200-blinkoff150
+
+"If you're in a terminal emulator like st or rxvt, Vim cannot change the color of your cursor; it will always be the color your terminal application decides to make it. Only the graphical version of Vim is able to change the color of your cursor.
+"You can change your cursor color through your terminal configuration though.
+"
+"Some ~/.Xdefaults / ~/.Xresources examples:
+"
+"XTerm*cursorColor: #FFFFFF
+"URxvt.cursorColor: white
+"
+" The above fully works in the GUI gvim, but not vim.
+" In an MSDOS or Win32 console, only the height of the cursor can be changed.
+" This can be done by specifying a block cursor, or a percentage for a vertical or
+" horizontal cursor.  For a console the 't_SI' and 't_EI' escape sequences are used.
+" It is possible to change the cursor color and style in the terminal if it understands
+" the following escape sequences. Not all terminals support this, but xterm, rxvt and Terminator do.
+let &t_ti.="\e[1 q"
+let &t_te.="\e[0 q"
+let &t_SI.="\e[5 q"
+let &t_EI.="\e[1 q"
+
+
+
+""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
+"  Cursor Navigation
+"
+""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
+" Vim 101: Quick Movement - http://usevim.com/2012/03/09/quick-movement/
+" Vim Movements - http://nerd-hacking.blogspot.com/2006/05/vim-movements.html
+" EsayMotion - https://github.com/easymotion/vim-easymotion
+" Vim Plugins You Should Know About, Part III: matchit.vim - http://www.catonmat.net/blog/vim-plugins-matchit-vim/
+
+
+
+""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
+"  Window Creation and Navigation
+"
+""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
+" commands to turn one vim session (inside one xterm) into multiple windows
+" :e filename      - edit another file
+" :split filename  - split window and load another file
+" ctrl-w up arrow  - move cursor up a window
+" ctrl-w ctrl-w    - move cursor to another window (cycle)
+" ctrl-w_          - maximize current window
+" ctrl-w=          - make all equal size
+" 10 ctrl-w+       - increase window size by 10 lines
+" :vsplit file     - vertical split
+" :sview file      - same as split, but readonly
+" :hide            - close current window
+" :only            - keep only this window open
+
 " bind Ctrl+<movement> keys to move around windows, instead of using Ctrl+w+<movement>
 map <c-j> <c-w>j
 map <c-k> <c-w>k
@@ -480,7 +548,10 @@ set clipboard=unnamed
 "map <F11> :set nopaste<CR>
 "imap <F10> <C-O>:set paste<CR>
 "imap <F11> <nop>
-"set pastetoggle=<F11>
+
+" to stop indenting when pasting with the mouse, hitting the F11 key
+" while in insert mode (or just :set paste)
+set pastetoggle=<F11>
 
 
 
@@ -496,6 +567,20 @@ set smartcase       " ...unless you type a capital
 " if the search term highlighting gets annoying, set a key to switch it off temporarily
 " clears the search highlights
 nmap <silent> <leader>n :silent :nohlsearch<cr>
+
+
+
+""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
+"	Text Markers
+"
+""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
+" use markers to set places you want to quickly get back to,
+" or to specify a block of text you want to copy or cut.
+" mk      - mark current position (can use a-z)
+" 'k      - move to mark k
+" d'k     - delete from current position to mark k
+" 'a-z    - same file
+" 'A-Z    - beteween files
 
 
 
@@ -691,50 +776,6 @@ endif
 
 
 """"""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
-"  Cursor Position, Color, Shape
-"
-""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
-" Vim allows the cursor shape, blink rate, and color to be customized
-" see http://vim.wikia.com/wiki/Configuring_the_cursor
-
-" highlight current line and column to contrast with background color
-" Could make screen redrawing slower.
-set cursorline
-highlight cursorline guibg=black
-highlight cursorcolumn guibg=black
-
-" Vim will use a block cursor in normal, command-line and visual mode
-" n-v-c = normal mode, or visual selection mode, or command mode (colon command)
-highlight Cursor guifg=black guibg=white
-set guicursor=n-v-c:block-Cursor-blinkwait700-blinkon400-blinkoff250
-
-" Vim will use a line cursor (30% of character width) insert mode
-" i-ci = insert mode, command line insert mode (colon command)
-highlight iCursor guifg=white guibg=red
-set guicursor=i-ci:ver30-iCursor-blinkwait300-blinkon200-blinkoff150
-
-"If you're in a terminal emulator like st or rxvt, Vim cannot change the color of your cursor; it will always be the color your terminal application decides to make it. Only the graphical version of Vim is able to change the color of your cursor.
-"You can change your cursor color through your terminal configuration though.
-"
-"Some ~/.Xdefaults / ~/.Xresources examples:
-"
-"XTerm*cursorColor: #FFFFFF
-"URxvt.cursorColor: white
-"
-" The above fully works in the GUI gvim, but not vim.
-" In an MSDOS or Win32 console, only the height of the cursor can be changed.
-" This can be done by specifying a block cursor, or a percentage for a vertical or
-" horizontal cursor.  For a console the 't_SI' and 't_EI' escape sequences are used.
-" It is possible to change the cursor color and style in the terminal if it understands
-" the following escape sequences. Not all terminals support this, but xterm, rxvt and Terminator do.
-let &t_ti.="\e[1 q"
-let &t_te.="\e[0 q"
-let &t_SI.="\e[5 q"
-let &t_EI.="\e[1 q"
-
-
-
-""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
 "  Status Line
 "
 """"""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
@@ -901,6 +942,23 @@ map <leader>a :call PreviewMarkdown()<cr>
 
 
 """"""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
+"  Makefiles
+"
+""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
+" vim can run the makefile without leaving the editing session:
+"
+" :map <f9> :make    - map the F9 key to run make
+" :set makeprg       - change what :make does
+"
+" :make will compile if you are using a Makefile. Use these to examine the compile errors:
+"
+" :copen    - open a mini-window with list of errors - hit enter on an error to jump to line
+" :cclose   - closes the mini-window
+" :cw       - toggles the mini-window (if errors exist)
+
+
+
+""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
 "  Abbreviations
 "
 """"""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
@@ -960,7 +1018,7 @@ endif
 "  Tester Functions
 "
 """"""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
-" a test to show if Vim can in fact output 256 colors 
+" a test to show if Vim can in fact output 256 colors
 " execute the script by typing ':VimColorTest'
 " https://emerg3nc3.wordpress.com/2012/07/28/full-256-color-support-for-vim-andor-xterm-on-ubuntu-12-04/
 function! VimColorTest(outfile, fgend, bgend)

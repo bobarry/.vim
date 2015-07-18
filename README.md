@@ -25,6 +25,7 @@ Vim Scripting Tutorials
 * [25 Vim Tutorials, Screencasts, and Resources][06]
 * [How to Write Vim Plugins with Python][07]
 * [:best of Vim][10]
+* [Scripting the Vim editor, Part 1: Variables, values, and expressions][12]
  
 Maintaining and Synchronizing Vim on Other Machines
 
@@ -85,3 +86,4 @@ could be gathered for this cheat sheet.
  [09]:http://gitref.org/
  [10]:http://www.bestofvim.com/
  [11]:http://items.sjbach.com/319/configuring-vim-right
+ [12]:http://www.ibm.com/developerworks/library/l-vim-script-1/

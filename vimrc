@@ -3,12 +3,12 @@
 
 """"""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
 "   Must Do First Stuff
-"
 """""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
 " FOR DEBUGGING: when bigger than zero, Vim will give messages about what it is doing
 set verbose=0
 
 " Use Vim settings, rather then Vi settings
+" By default Vim starts in Vi compatibility mode. This means that most of the good features are turned off.
 " This must be first, because it changes other options as a side effect.
 set nocompatible    " make vim incompatible to vi
 
@@ -16,7 +16,6 @@ set nocompatible    " make vim incompatible to vi
 
 """"""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
 "   General Stuff
-"
 """""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
 " time in milliseconds that is waited for a key code or mapped key sequence to complete
 set timeoutlen=1000
@@ -58,21 +57,19 @@ set undolevels=200  " use many muchos levels of undo
 
 """"""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
 "  Persistent Undo
-"
 """""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
 " Once you quit Vim, the undo history for that file is gone.
 " Keep undo history across sessions by storing it in a file
+" Make sure ~/.vim/backup has been created
 if has('persistent_undo')
-    silent !mkdir ~/.vim/backup > /dev/null 2>&1
-    set undodir=~/.vim/backup
-    set undofile        " Maintain undo history between sessions
+    set undodir=~/.vim/backup   " location of undo history
+    set undofile                " maintain undo history between sessions
 endif
 
 
 
 """"""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
 "  Colors and Fonts
-"
 """"""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
 " To select a font, do ':set guifont=*' and select the font you want to use.
 " Once you're happy with it, do ':set guifont?' and it will output the current
@@ -110,7 +107,6 @@ set ffs=unix,dos,mac
 
 """"""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
 "	File Type Highlighting
-"
 """"""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
 " enables Vim to show parts of the text in another font or color
 syntax on			" Enable syntax highlighting
@@ -124,7 +120,6 @@ filetype indent on	" Enable filetype-specific indenting
 
 """"""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
 "	Plugins
-"
 """"""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
 "---------------------------------- Pathogen -----------------------------------
 " to install Pathogen for managing your plugins
@@ -237,61 +232,7 @@ let g:vim_markdown_folding_disabled=1       " disable folding
 
 
 """"""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
-"	Vim Start-Up Position
-"
-""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
-" To see or to set the current Vim window position on the screen, you can use ':winpos'
-" or ':winpos x y' but this will only work in the GUI (i.e. gvim).
-"
-" http://www.scarpa.name/2011/04/06/terminal-vim-resizing/
-" http://vim.wikia.com/wiki/Restore_screen_size_and_position
-
-" Function to increase the size of the terminal window for Vim editing
-function! SizeUpFunc()
-    if exists("g:oldColumns")
-        return
-    endif
-    let g:oldColumns = &columns     " Save the current width
-    let g:oldLines = &lines         " Save the current length
-    winpos 900 25	                " location of window when Vim opens
-    set lines=75                    " number of lines in the terminal window when Vim opens
-    set columns=130                 " number of columns in the terminal window when Vim opens
-endfunction
-command! SizeUp call SizeUpFunc()
-
-" Function to restore the terminal window to its orginal size
-function! SizeDownFunc()
-    if !exists("g:oldColumns")
-        return
-    endif
-    let &columns = g:oldColumns     " restore the orginal width
-    let &lines = g:oldLines         " restore the orginal length
-    unlet g:oldColumns              " remove the variable
-    unlet g:oldLines                " remove the variable
-endfunction
-command! SizeDown call SizeDownFunc()
-
-augroup VimStartUp
-    " delete any old autocommands in this group
-    autocmd!
-    " save/restore the size of the terminal window
-    autocmd VimEnter * SizeUp           " increase the size of the terminal window
-    autocmd VimLeavePre * SizeDown      " restore terminal size when Vim quits
-    " make Vim returns to the same line when we reopen a file
-    autocmd BufReadPost *
-        \ if line("'\"") > 0 && line("'\"") <= line("$") |
-        \ execute 'normal! g`"zvzz' |
-        \ endif
-augroup END
-
-" remember info about open buffers on close
-set viminfo^=%
-
-
-
-""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
 "  Text Scrolling and Paging Controls
-"
 """"""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
 " text scrolling behaver
 set scrolloff=8         " minimal number of screen lines to keep above and below the cursor.
@@ -313,52 +254,44 @@ map  <Alt><Down> <c-f>
 
 
 """"""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
-"  Cursor Position, Color, Shape
-"
+"  Cursor Color and Shape
 """"""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
-" Vim allows the cursor shape, blink rate, and color to be customized
+" gVim allows the cursor shape, blink rate, and color to be customized
 " see http://vim.wikia.com/wiki/Configuring_the_cursor
+if has("gui_running")           " settings for GUI Vim (i.e. gvim)
+    " highlight current line and column to contrast with background color
+    " Could make screen redrawing slower.
+    set cursorline
+    highlight cursorline guibg=black
+    highlight cursorcolumn guibg=black
 
-" highlight current line and column to contrast with background color
-" Could make screen redrawing slower.
-set cursorline
-highlight cursorline guibg=black
-highlight cursorcolumn guibg=black
+    " Vim will use a block cursor in normal, command-line and visual mode
+    " n-v-c = normal mode, or visual selection mode, or command mode (colon command)
+    highlight Cursor guifg=black guibg=white
+    set guicursor=n-v-c:block-Cursor-blinkwait700-blinkon400-blinkoff250
 
-" Vim will use a block cursor in normal, command-line and visual mode
-" n-v-c = normal mode, or visual selection mode, or command mode (colon command)
-highlight Cursor guifg=black guibg=white
-set guicursor=n-v-c:block-Cursor-blinkwait700-blinkon400-blinkoff250
+    " Vim will use a line cursor (30% of character width) insert mode
+    " i-ci = insert mode, command line insert mode (colon command)
+    highlight iCursor guifg=white guibg=red
+    set guicursor=i-ci:ver30-iCursor-blinkwait300-blinkon200-blinkoff150
+endif
 
-" Vim will use a line cursor (30% of character width) insert mode
-" i-ci = insert mode, command line insert mode (colon command)
-highlight iCursor guifg=white guibg=red
-set guicursor=i-ci:ver30-iCursor-blinkwait300-blinkon200-blinkoff150
+" for Vim, it is possible to change the cursor color and style in the terminal
+" if it understands the following escape sequences.
+if &term =~ "xterm\\|rxvt"
+    let &t_SI = "\<Esc>]12;red\x7"          " use an red cursor in insert mode
+    let &t_EI = "\<Esc>]12;white\x7"        " use a white cursor otherwise
+    silent !echo -ne "\033]12;white\007"
 
-"If you're in a terminal emulator like st or rxvt, Vim cannot change the color of your cursor; it will always be the color your terminal application decides to make it. Only the graphical version of Vim is able to change the color of your cursor.
-"You can change your cursor color through your terminal configuration though.
-"
-"Some ~/.Xdefaults / ~/.Xresources examples:
-"
-"XTerm*cursorColor: #FFFFFF
-"URxvt.cursorColor: white
-"
-" The above fully works in the GUI gvim, but not vim.
-" In an MSDOS or Win32 console, only the height of the cursor can be changed.
-" This can be done by specifying a block cursor, or a percentage for a vertical or
-" horizontal cursor.  For a console the 't_SI' and 't_EI' escape sequences are used.
-" It is possible to change the cursor color and style in the terminal if it understands
-" the following escape sequences. Not all terminals support this, but xterm, rxvt and Terminator do.
-let &t_ti.="\e[1 q"
-let &t_te.="\e[0 q"
-let &t_SI.="\e[5 q"
-let &t_EI.="\e[1 q"
+    " reset cursor when vim exits
+    " use \003]12;gray\007 for gnome-terminal
+    autocmd VimLeave * silent !echo -ne "\033]112\007"
+endif
 
 
 
 """"""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
 "  Cursor Navigation
-"
 """"""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
 " Vim 101: Quick Movement - http://usevim.com/2012/03/09/quick-movement/
 " Vim Movements - http://nerd-hacking.blogspot.com/2006/05/vim-movements.html
@@ -368,8 +301,7 @@ let &t_EI.="\e[1 q"
 
 
 """"""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
-"  Window Creation and Navigation
-"
+"  Window Splits and Navigation
 """"""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
 " commands to turn one vim session (inside one xterm) into multiple windows
 " :e filename      - edit another file
@@ -385,16 +317,21 @@ let &t_EI.="\e[1 q"
 " :only            - keep only this window open
 
 " bind Ctrl+<movement> keys to move around windows, instead of using Ctrl+w+<movement>
-map <c-j> <c-w>j
-map <c-k> <c-w>k
-map <c-l> <c-w>l
-map <c-h> <c-w>h
+nmap <silent> <C-h> :wincmd h<CR>
+nmap <silent> <C-j> :wincmd j<CR>
+nmap <silent> <C-k> :wincmd k<CR>
+nmap <silent> <C-l> :wincmd l<CR>
+
+" bind Alt+<arrowkey> keys to move around windows
+nmap <silent> <A-Up> :wincmd k<CR>
+nmap <silent> <A-Down> :wincmd j<CR>
+nmap <silent> <A-Left> :wincmd h<CR>
+nmap <silent> <A-Right> :wincmd l<CR>
 
 
 
 """"""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
 "  Folding
-"
 """"""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
 " here are the commands you need to know for folding
 "   zi      toggle folding feature on/off
@@ -429,8 +366,8 @@ set nofoldenable        " don't fold by default
 
 """"""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
 "  Window Menu Tabs
-"
 """"""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
+" *** Check if this works the same way in both gVim and Vim ***
 " Useful mappings for managing tabs
 map <leader>tn :tabnew<cr>
 map <leader>to :tabonly<cr>
@@ -442,15 +379,14 @@ map <leader>tm :tabmove
 map <leader>te :tabedit <c-r>=expand("%:p:h")<cr>/
 
 " color the tabs
-hi TabLineFill ctermfg=Black ctermbg=Gray
-hi TabLine ctermfg=Black ctermbg=Gray
-hi TabLineSel ctermfg=DarkGreen ctermbg=Gray
+highlight TabLineFill ctermfg=Black ctermbg=Gray
+highlight TabLine ctermfg=Black ctermbg=Gray
+highlight TabLineSel ctermfg=DarkGreen ctermbg=Gray
 
 
 
 """"""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
 "  Spell Checking
-"
 """"""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
 " here are the minimal commands you need to know for spell
 "   ]s    move to the next misspelled word
@@ -458,29 +394,29 @@ hi TabLineSel ctermfg=DarkGreen ctermbg=Gray
 "   zg    add a word to the dictionary
 "   zug   undo the addition of a word to the dictionary
 "   z=    view spelling suggestions for a misspelled word
-setlocal spell spelllang=en_us   " use USA English spelling dictionary
-setlocal nospell                 " disable inline spell check at startup
+if has("spell")
+    setlocal spell spelllang=en_us   " use USA English spelling dictionary
+    setlocal nospell                 " disable inline spell check at startup
 
-" file used when you add words you don't want flagged by spell
-set spellfile=$HOME/.vim/spell/en.utf-8.add
+    " file used when you add words you don't want flagged by spell
+    set spellfile=$HOME/.vim/spell/en.utf-8.add
 
-" toggle and untoggle spell checking
-map <leader>sp :setlocal spell!<cr>
+    " toggle and untoggle spell checking
+    map <leader>sp :setlocal spell!<cr>
 
-" Shortcuts using <leader>
-" map <leader>sn ]s
-" map <leader>sp [s
-" map <leader>sa zg
-" map <leader>s? z=
+    " Shortcuts using <leader>
+    " map <leader>sn ]s
+    " map <leader>sp [s
+    " map <leader>sa zg
+    " map <leader>s? z=
+endif
 
 
 
 """"""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
 "	VIM User Interface
-"
 """"""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
-
-set mouse=a		" Enable mouse usage; to paste, press shift while selecting with the mouse
+set mouse=a         " Enable mouse usage; to paste, press shift while selecting with the mouse
 
 " Height of the command bar
 set cmdheight=1
@@ -489,7 +425,7 @@ set cmdheight=1
 set backspace=eol,start,indent
 set whichwrap+=<,>,h,l
 
-set lazyredraw		" Don't redraw while executing macros
+set lazyredraw	    " Don't redraw while executing macros
 set magic			" For regular expressions turn magic on
 set showcmd			" Show (partial) commands in status line
 set showmode        " Show current mode down the bottom
@@ -500,7 +436,6 @@ set mat=2			" tenths of a second to blink when matching brackets
 
 """"""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
 "	Set Terminal Title
-"
 """"""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
 set title		    "Show info in the window title
 
@@ -516,7 +451,6 @@ augroup END
 
 """"""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
 "	Sound and Other Effects for Errors / Warnings
-"
 """"""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
 set errorbells          " ring bell on error
 set visualbell          " see a brief window flash on error
@@ -529,7 +463,6 @@ set visualbell          " see a brief window flash on error
 
 """"""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
 "  Clipboard, Copy & Paste
-"
 """"""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
 " Vim lets us access the system clipboard using the quoteplus register, "+.
 " http://vimcasts.org/episodes/accessing-the-system-clipboard-from-vim/
@@ -557,7 +490,6 @@ set pastetoggle=<F11>
 
 """"""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
 "	Text Searching
-"
 """"""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
 set incsearch       " find the next match as we type the search
 set hlsearch        " highlight searches by default
@@ -572,7 +504,6 @@ nmap <silent> <leader>n :silent :nohlsearch<cr>
 
 """"""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
 "	Text Markers
-"
 """"""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
 " use markers to set places you want to quickly get back to,
 " or to specify a block of text you want to copy or cut.
@@ -586,7 +517,6 @@ nmap <silent> <leader>n :silent :nohlsearch<cr>
 
 """"""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
 "  Text Indentation
-"
 """"""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
 set copyindent		" copy previous indent on enter
 
@@ -606,7 +536,6 @@ augroup END
 
 """"""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
 "  Text and Tabs
-"
 """"""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
 set expandtab		" Use spaces instead of tabs
 set smarttab		" Be smart when using tabs
@@ -620,7 +549,6 @@ nmap <leader>hc :set list!<cr>
 
 """"""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
 "  Line Wrapping and Breaking
-"
 """"""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
 " improve the display of line wraps - http://www.bestofvim.com/tip/better-line-wraps/
 " http://www.tagwith.com/question_1169785_vim-change-lines-font-color-based-upon-first-character-in-the-line
@@ -641,7 +569,6 @@ set formatoptions=1	" to stop unexpected effects, use :set paste and leave this 
 
 """"""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
 "  Special Syntax-Highlighting
-"
 """"""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
 " Force the syntax-highlight based on the nature of the file name
 augroup VimSyntax
@@ -654,7 +581,6 @@ augroup END
 
 """"""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
 "   Files, Backups, and Undo
-"
 """"""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
 " disable backup and swap files (they trigger too many events)
 set nobackup
@@ -675,7 +601,6 @@ endif
 
 """"""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
 "  Special Key Mappings
-"
 """"""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
 " map sort function to key
 vnoremap <leader>s :sort<cr>
@@ -719,7 +644,6 @@ cmap w!! w !sudo tee > /dev/null %
 
 """"""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
 "   White Space
-"
 """"""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
 " do not display tabs, ends of lines, or other hidden characters
 set nolist
@@ -741,7 +665,6 @@ nnoremap <silent> <Leader>tws :call TrimWhiteSpace()<cr>
 
 """"""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
 "  Command Completion
-"
 """"""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
 " pressing <TAB> in command mode will choose the first possible completion
 " this lets you see what your other options are
@@ -761,7 +684,6 @@ set wildignore+=*.orig                              " Merge resolution files
 
 """"""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
 "  Line Numbering
-"
 """"""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
 set number			" enable line numbers
 set numberwidth=4	" space provided for line numbering
@@ -777,7 +699,6 @@ endif
 
 """"""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
 "  Status Line
-"
 """"""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
 " format the status line at the bottom of the Vim window
 " status line broken down into easily include-able segments
@@ -793,31 +714,87 @@ if has('statusline')
     set statusline+=(Line:\ %l/%L,\ Column:\ %c)    " current line number, total lines, and current column
 endif
 
-function! InsertStatuslineColor(mode)
-    if a:mode == 'i'
-        hi statusline guibg=Cyan ctermfg=6 guifg=Black ctermbg=0
-    elseif a:mode == 'r'
-        hi statusline guibg=Purple ctermfg=5 guifg=Black ctermbg=0
-    else
-        hi statusline guibg=DarkRed ctermfg=1 guifg=Black ctermbg=0
-    endif
-endfunction
+if has("gui_running")           " settings for GUI Vim (i.e. gvim)
+    function! InsertStatuslineColor(mode)
+        if a:mode == 'i'        " insert mode
+            highlight statusline guibg=Cyan ctermfg=6 guifg=Black ctermbg=0
+        elseif a:mode == 'v'    " visual mode
+            highlight statusline guibg=Blue ctermfg=5 guifg=Black ctermbg=0
+        else
+            highlight statusline guibg=DarkRed ctermfg=1 guifg=Black ctermbg=0
+        endif
+    endfunction
 
-augroup VimStatusLine
+    augroup VimStatusLine
+        " delete any old autocommands in this group
+        autocmd!
+        autocmd InsertEnter * call InsertStatuslineColor(v:insertmode)
+        autocmd InsertLeave * highlight statusline guibg=DarkGreen ctermfg=8 guifg=White ctermbg=15
+    augroup END
+
+    " default the statusline to dark green when entering Vim
+    highlight statusline guibg=DarkGreen ctermfg=8 guifg=White ctermbg=15
+endif
+
+
+
+""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
+"	Vim Start-Up Size and Position
+""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
+" To see or to set the current window position on the screen, you can use ':winpos'
+" or ':winpos x y' but this will only work in the GUI (i.e. gvim).
+" This is useful if you always want Vim to startup in the same location and
+" size as the time you exit it (works for vim and gvim).
+"
+" http://vim.wikia.com/wiki/Restore_screen_size_and_position
+
+" Function to increase the size of the terminal window for Vim editing
+function! SizeUpFunc()
+    if exists("g:oldColumns")
+        return
+    endif
+    let g:oldColumns = &columns     " Save the current width
+    let g:oldLines = &lines         " Save the current length
+    winpos 900 25	            " location of window when Vim opens
+    set lines=75                    " number of lines in  the terminal window when Vim opens
+    set columns=130                 " number of columns in the terminal window when Vim opens
+endfunction
+command! SizeUp call SizeUpFunc()
+
+" Function to restore the terminal window to its orginal size
+function! SizeDownFunc()
+    if !exists("g:oldColumns")
+        return
+    endif
+    let &columns = g:oldColumns     " restore the orginal width
+    let &lines = g:oldLines         " restore the orginal length
+    unlet g:oldColumns              " remove the variable
+    unlet g:oldLines                " remove the variable
+endfunction
+command! SizeDown call SizeDownFunc()
+
+augroup VimStartUp
     " delete any old autocommands in this group
     autocmd!
-    autocmd InsertEnter * call InsertStatuslineColor(v:insertmode)
-    autocmd InsertLeave * hi statusline guibg=DarkGrey ctermfg=8 guifg=White ctermbg=15
+
+    " save/restore the size of the terminal window
+    autocmd VimEnter * SizeUp           " increase the size of the terminal window
+    autocmd VimLeavePre * SizeDown      " restore terminal size when Vim quits
+
+    " make Vim returns to the same line when we reopen a file
+    autocmd BufReadPost *
+        \ if line("'\"") > 0 && line("'\"") <= line("$") |
+        \ execute 'normal! g`"zvzz' |
+        \ endif
 augroup END
 
-" default the statusline to green when entering Vim
-hi statusline guibg=DarkGrey ctermfg=8 guifg=White ctermbg=15
+" remember info about open buffers on close
+set viminfo^=%
 
 
 
 """"""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
 "  Markdown Preview
-"
 """"""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
 " While editing a Markdown document in Vim, preview it in the default browser.
 "
@@ -916,21 +893,18 @@ map <leader>a :call PreviewMarkdown()<cr>
 
 """"""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
 "   Shell Specific
-"
 """"""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
 
 
 
 """"""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
 "   C++ Specific
-"
 """"""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
 
 
 
 """"""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
 "   Python Specific
-"
 """"""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
 "augroup VimPython
 "    " delete any old autocommands in this group
@@ -943,7 +917,6 @@ map <leader>a :call PreviewMarkdown()<cr>
 
 """"""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
 "  Makefiles
-"
 """"""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
 " vim can run the makefile without leaving the editing session:
 "
@@ -960,7 +933,6 @@ map <leader>a :call PreviewMarkdown()<cr>
 
 """"""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
 "  Abbreviations
-"
 """"""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
 " when in INPUT mode and hit space after typing the abbreviation, Vim will replace it
 iabbrev #c /****************************************************************************/
@@ -973,7 +945,6 @@ iabbrev ccopy Copyright 2015 Jeffrey C. Irland, all rights reserved.
 
 """"""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
 "  Helper Functions
-"
 """"""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
 " Returns true if paste mode is enabled
 function! HasPaste()
@@ -1016,7 +987,6 @@ endif
 
 """"""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
 "  Tester Functions
-"
 """"""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
 " a test to show if Vim can in fact output 256 colors
 " execute the script by typing ':VimColorTest'

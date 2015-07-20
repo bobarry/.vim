@@ -1,5 +1,5 @@
 " Maintainer:   jeffskinnerbox@yahoo.com / www.jeffskinnerbox.me
-" Version:      1.0.4
+" Version:      1.0.5
 
 """"""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
 "   Must Do First Stuff
@@ -228,10 +228,12 @@ let g:vim_markdown_folding_disabled=1       " disable folding
 " to install
 "       cd ~/.vim/bundle
 "       git clone git://github.com/scrooloose/nerdcommenter.git
+"
+" [count]<leader>cc     Comment out the current line or text selected in visual mode.
+" [count]<leader>cu     Uncomments the selected line(s).
 
 
-
-""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
+""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
 "  Text Scrolling and Paging Controls
 """"""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
 " text scrolling behaver
@@ -467,8 +469,10 @@ set visualbell          " see a brief window flash on error
 " Vim lets us access the system clipboard using the quoteplus register, "+.
 " http://vimcasts.org/episodes/accessing-the-system-clipboard-from-vim/
 " http://vim.wikia.com/wiki/Accessing_the_system_clipboard
+" http://vim.wikia.com/wiki/Cut/copy_and_paste_using_visual_selection
 
 " "+y - if you want to yank text from a Vim buffer into the system clipboard
+" "+dd - if you want to cut text from a Vim buffer into the system clipboard
 " "+p - paste text from the system clipboard into your Vim buffer
 
 " use th system clipboard for all yank, delete, change, put operations that don't have  a register
@@ -516,9 +520,17 @@ nmap <silent> <leader>n :silent :nohlsearch<cr>
 
 
 """"""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
-"  Text Indentation
+"  Text Indentation / Tabs
 """"""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
+" http://vim.wikia.com/wiki/Indenting_source_code
+" auto-indentation rules are just the defaults and will most-likely will be
+" overridden by plugins you use for common programming languages
+set autoindent      " always set autoindenting on
 set copyindent		" copy previous indent on enter
+set expandtab		" Use spaces instead of tabs
+set smarttab		" Be smart when using tabs
+set shiftwidth=4	" 1 tab equals 4 spaces
+set tabstop=4		" set tab stops ever 4 character spaces
 
 "Indent only if the file is of type cpp,c,java,sh,pl,php,asp
 augroup VimIndent
@@ -535,15 +547,13 @@ augroup END
 
 
 """"""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
-"  Text and Tabs
+"  Hidden Text
 """"""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
-set expandtab		" Use spaces instead of tabs
-set smarttab		" Be smart when using tabs
-set shiftwidth=4	" 1 tab equals 4 spaces
-set tabstop=4		" set tab stops ever 4 character spaces
-
 " toggle between showing and hiding hidden characters
 nmap <leader>hc :set list!<cr>
+
+" enumerates which hidden characters to display and which character to display them with
+set listchars=tab:>-,trail:.,extends:#,nbsp:.
 
 
 
@@ -700,8 +710,7 @@ endif
 """"""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
 "  Status Line
 """"""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
-" format the status line at the bottom of the Vim window
-" status line broken down into easily include-able segments
+" status line broken down into easily include-able segments of information
 if has('statusline')
     set laststatus=2                                " Always show the status line
     set statusline=%<File:\ %f                      " Filename
@@ -714,26 +723,54 @@ if has('statusline')
     set statusline+=(Line:\ %l/%L,\ Column:\ %c)    " current line number, total lines, and current column
 endif
 
+" format the status line at the bottom of the Vim window and line number based on vim's mode
+" http://stackoverflow.com/questions/15561132/run-command-when-vim-enters-visual-mode
 if has("gui_running")           " settings for GUI Vim (i.e. gvim)
-    function! InsertStatuslineColor(mode)
+    " colorize the status line and line number for insert mode
+    function! InsertStatusLineColor(mode)
         if a:mode == 'i'        " insert mode
             highlight statusline guibg=Cyan ctermfg=6 guifg=Black ctermbg=0
-        elseif a:mode == 'v'    " visual mode
-            highlight statusline guibg=Blue ctermfg=5 guifg=Black ctermbg=0
+            highlight CursorLineNr ctermfg=4 guifg=Cyan
+        elseif a:mode == "r"    " replace mode
+            highlight statusline guibg=Orange ctermfg=6 guifg=Black ctermbg=0
+            highlight CursorLineNr ctermfg=4 guifg=Orange
         else
             highlight statusline guibg=DarkRed ctermfg=1 guifg=Black ctermbg=0
+            highlight CursorLineNr ctermfg=4 guifg=Red
         endif
     endfunction
+
+    " colorize the status line and line number for visual mode
+    function! VisualStatusLineColor()
+        set updatetime=0        " for CursorHold event
+        highlight statusline guibg=Yellow ctermfg=6 guifg=Black ctermbg=0
+        highlight CursorLineNr ctermfg=4 guifg=Yellow
+    endfunction
+
+    " colorize the status line and line number for for normal mode
+    function! ResetStatusLineColor()
+        set updatetime=4000     " for CursorHold event
+        highlight statusline guibg=DarkGreen ctermfg=6 guifg=White ctermbg=0
+        highlight CursorLineNr cterm=none ctermfg=0 guifg=White
+    endfunction
+
+    " remap relevant visual mode key bindings to call the enter visual function
+    vnoremap <silent> <expr> <SID>VisualStatusLineColor VisualStatusLineColor()
+    nnoremap <silent> <script> v v<SID>VisualStatusLineColor
+    nnoremap <silent> <script> V V<SID>VisualStatusLineColor
+    nnoremap <silent> <script> <C-v> <C-v><SID>VisualStatusLineColor
 
     augroup VimStatusLine
         " delete any old autocommands in this group
         autocmd!
-        autocmd InsertEnter * call InsertStatuslineColor(v:insertmode)
-        autocmd InsertLeave * highlight statusline guibg=DarkGreen ctermfg=8 guifg=White ctermbg=15
+        autocmd InsertEnter * call InsertStatusLineColor(v:insertmode)
+        autocmd InsertLeave * call ResetStatusLineColor()
+        autocmd CursorHold * call ResetStatusLineColor()
     augroup END
 
-    " default the statusline to dark green when entering Vim
+    " default the statusline to dark green when you first entering gVim
     highlight statusline guibg=DarkGreen ctermfg=8 guifg=White ctermbg=15
+    highlight CursorLineNr ctermfg=4 guifg=White
 endif
 
 
@@ -755,7 +792,7 @@ function! SizeUpFunc()
     endif
     let g:oldColumns = &columns     " Save the current width
     let g:oldLines = &lines         " Save the current length
-    winpos 900 25	            " location of window when Vim opens
+    winpos 900 25	                " location of window when Vim opens, only works for gVim
     set lines=75                    " number of lines in  the terminal window when Vim opens
     set columns=130                 " number of columns in the terminal window when Vim opens
 endfunction

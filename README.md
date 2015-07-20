@@ -72,6 +72,7 @@ could be gathered for this cheat sheet.
 * [CodeMirror](http://codemirror.net/)
 * [TextAid](http://lalashan.mcmaster.ca/theobio/projects/index.php/TextAid)
 * [Working Productively in Bash's Vi Command Line Editing Mode (with Cheat Sheet)](http://www.catonmat.net/blog/bash-vi-editing-mode-cheat-sheet/)
+* [usevim](http://usevim.com/)
 
 
 

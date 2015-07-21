@@ -1,5 +1,5 @@
 " Maintainer:   jeffskinnerbox@yahoo.com / www.jeffskinnerbox.me
-" Version:      1.0.5
+" Version:      1.0.6
 
 """"""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
 "   Must Do First Stuff
@@ -121,6 +121,16 @@ filetype indent on	" Enable filetype-specific indenting
 """"""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
 "	Plugins
 """"""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
+" to see the file names of all scripts loaded (sourced) by Vim,
+" including those loaded implicitly at startup, enter:
+"
+"   :scriptnames
+"
+" This list does not include scripts that Vim tried to open but which failed without warning.
+" To see these scripts, use the -V option when starting Vim:
+"
+"   vim -V
+
 "---------------------------------- Pathogen -----------------------------------
 " to install Pathogen for managing your plugins
 "       mkdir -p ~/.vim/autoload ~/.vim/bundle
@@ -231,6 +241,12 @@ let g:vim_markdown_folding_disabled=1       " disable folding
 "
 " [count]<leader>cc     Comment out the current line or text selected in visual mode.
 " [count]<leader>cu     Uncomments the selected line(s).
+
+"----------------------------------- matchit -----------------------------------
+" to install
+"       cd ~/.vim/bundle
+"       git clone https://github.com/tmhedberg/matchit.git
+
 
 
 """"""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""

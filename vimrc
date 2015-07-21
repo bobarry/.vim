@@ -241,17 +241,15 @@ set scrolloff=8         " minimal number of screen lines to keep above and below
 set sidescrolloff=15    " minimal number of screen columns left & right of the cursor if 'nowrap' is set
 set sidescroll=1        " minimal number of columns to scroll horizontally.
 
-" the paging behavior defaults for vim
+" the default paging behavior for vim
 " <Ctrl>b - Move back one full screen
 " <Ctrl>f - Move forward one full screen
 " <Ctrl>d - Move forward 1/2 screen
 " <Ctrl>u - Move back (up) 1/2 screen
 
-" Mapping keys in Vim - http://vim.wikia.com/wiki/Mapping_keys_in_Vim_-_Tutorial_%28Part_1%29
 " map Alt-Arrow-Keys as they would be used in a Chromebook
-map  <Alt><Up> <c-b>
-map  <Alt><Down> <c-f>
-" the above doesn't work yet
+map  <A-Up> <c-b>
+map  <A-Down> <c-f>
 
 
 
@@ -324,11 +322,11 @@ nmap <silent> <C-j> :wincmd j<CR>
 nmap <silent> <C-k> :wincmd k<CR>
 nmap <silent> <C-l> :wincmd l<CR>
 
-" bind Alt+<arrowkey> keys to move around windows
-nmap <silent> <A-Up> :wincmd k<CR>
-nmap <silent> <A-Down> :wincmd j<CR>
-nmap <silent> <A-Left> :wincmd h<CR>
-nmap <silent> <A-Right> :wincmd l<CR>
+" bind Ctrl+<arrowkey> keys to move around windows
+nmap <silent> <C-Up> :wincmd k<CR>
+nmap <silent> <C-Down> :wincmd j<CR>
+nmap <silent> <C-Left> :wincmd h<CR>
+nmap <silent> <C-Right> :wincmd l<CR>
 
 
 
@@ -403,14 +401,15 @@ if has("spell")
     " file used when you add words you don't want flagged by spell
     set spellfile=$HOME/.vim/spell/en.utf-8.add
 
-    " toggle and untoggle spell checking
+    " toggle and toggle spell checking
     map <leader>sp :setlocal spell!<cr>
 
     " Shortcuts using <leader>
-    " map <leader>sn ]s
-    " map <leader>sp [s
-    " map <leader>sa zg
-    " map <leader>s? z=
+    map <leader>sd ]s       " move to the next misspelled word
+    map <leader>su [s       " move to the previous misspelled word
+    map <leader>sa zg       " add a word to the dictionary
+    map <leader>sua zug     " undo the addition of a word to the dictionary
+    map <leader>s? z=       " view spelling suggestions for a misspelled word
 endif
 
 
@@ -671,6 +670,17 @@ function! TrimWhiteSpace()
 endfunction
 nnoremap <silent> <Leader>tws :call TrimWhiteSpace()<cr>
 
+" function to delete trailing white space
+function! DeleteTrailingWS()
+    exe "normal mz"
+    %s/\s\+$//ge
+    exe "normal `z"
+endfunc
+
+" delete trailing white space for Python and CoffeeScript
+autocmd BufWrite *.py :call DeleteTrailingWS()
+autocmd BufWrite *.coffee :call DeleteTrailingWS()
+
 
 
 """"""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
@@ -712,15 +722,15 @@ endif
 """"""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
 " status line broken down into easily include-able segments of information
 if has('statusline')
-    set laststatus=2                                " Always show the status line
-    set statusline=%<File:\ %f                      " Filename
-    set statusline+=\ %w%h%m%r                      " Options
-   "set statusline+=%{fugitive#statusline()}        " Git Hotness
-    set statusline+=\ [%{&ff}/%Y]                   " file type
-    set statusline+=\ CWD:\ %{getcwd()}             " current working directory
-   "set statusline+=\ [A=\%03.3b/H=\%02.2B]         " ASCII / Hexadecimal value of character under cursor
-    set statusline+=\ \ \ \ \ \ \ \ \ \ \ \ \ \     " spacing
-    set statusline+=(Line:\ %l/%L,\ Column:\ %c)    " current line number, total lines, and current column
+    set laststatus=2                                    " Always show the status line
+    set statusline=%<File:\ %f                          " Filename
+    set statusline+=\ \ CWD:\ %{getcwd()}               " current working directory
+    set statusline+=\ [%{&ff}/%Y]                       " file format and type
+    set statusline+=\ \ Buffer:\ %n\ of\ %N             " Number of buffers
+    set statusline+=\ \ %w%h%m%r                        " Options
+    set statusline+=\ \ \ \ \ \ \ \ \ \                 " spacing
+    set statusline+=(ASCII=\%03.3b/Hex=\%02.2B)         " ASCII / Hexadecimal value of character under cursor
+    set statusline+=\ \ (Line:\ %l/%L,\ Column:\ %c)    " current line number, total lines, and current column
 endif
 
 " format the status line at the bottom of the Vim window and line number based on vim's mode

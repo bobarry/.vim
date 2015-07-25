@@ -1,5 +1,5 @@
 " Maintainer:   jeffskinnerbox@yahoo.com / www.jeffskinnerbox.me
-" Version:      1.0.6
+" Version:      1.0.7
 
 """"""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
 "   Must Do First Stuff
@@ -20,8 +20,8 @@ set nocompatible    " make vim incompatible to vi
 " time in milliseconds that is waited for a key code or mapped key sequence to complete
 set timeoutlen=1000
 
-" default leader is '\', but many people prefer ','
-" The mapleader has to be set before starts loading all the plugins.
+" default leader is '\', but I prefer ','
+" The mapleader has to be set before starts loading any of the plugins
 let mapleader = ","
 let g:mapleader = ","
 
@@ -52,19 +52,6 @@ set hidden			" buffers can exist in background - http://items.sjbach.com/319/con
 
 set history=200		" sets how many command line history VIM has to remember
 set undolevels=200  " use many muchos levels of undo
-
-
-
-""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
-"  Persistent Undo
-"""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
-" Once you quit Vim, the undo history for that file is gone.
-" Keep undo history across sessions by storing it in a file
-" Make sure ~/.vim/backup has been created
-if has('persistent_undo')
-    set undodir=~/.vim/backup   " location of undo history
-    set undofile                " maintain undo history between sessions
-endif
 
 
 
@@ -121,7 +108,7 @@ filetype indent on	" Enable filetype-specific indenting
 """"""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
 "	Plugins
 """"""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
-" to see the file names of all scripts loaded (sourced) by Vim,
+" to see the file names of all scripts/plugins loaded (sourced) by Vim,
 " including those loaded implicitly at startup, enter:
 "
 "   :scriptnames
@@ -148,6 +135,7 @@ syntax on                   " set syntax highlighting and color highlighting for
 " to install
 "       cd ~/.vim/bundle
 "       git clone https://github.com/scrooloose/nerdtree.git
+
 let NERDTreeShowBookmarks=1
 let NERDTreeIgnore=['\.pyc', '\~$', '\.swo$', '\.swp$', '\.git', '\.hg', '\.svn', '\.bzr']
 let NERDTreeChDirMode=0
@@ -172,16 +160,16 @@ nmap <leader>nt :NERDTreeToggle<cr>     " toggle NERDTree on or off
 "       git clone git://github.com/klen/python-mode.git
 
 " Python-Mode Keys:
-" K             Show python docs
-" <Ctrl-Space>  Rope autocomplete
-" <Ctrl-c>g     Rope goto definition
-" <Ctrl-c>d     Rope show documentation
-" <Ctrl-c>f     Rope find occurrences
-" <Leader>b     Set, unset breakpoint (g:pymode_breakpoint enabled)
-" [[            Jump on previous class or function (normal, visual, operator modes)
-" ]]            Jump on next class or function (normal, visual, operator modes)
-" [M            Jump on previous class or method (normal, visual, operator modes)
-" ]M            Jump on next class or method (normal, visual, operator modes)
+"   K             Show python docs
+"   <Ctrl-Space>  Rope autocomplete
+"   <Ctrl-c>g     Rope goto definition
+"   <Ctrl-c>d     Rope show documentation
+"   <Ctrl-c>f     Rope find occurrences
+"   <Leader>b     Set, unset breakpoint (g:pymode_breakpoint enabled)
+"   [[            Jump on previous class or function (normal, visual, operator modes)
+"   ]]            Jump on next class or function (normal, visual, operator modes)
+"   [M            Jump on previous class or method (normal, visual, operator modes)
+"   ]M            Jump on next class or method (normal, visual, operator modes)
 
 let g:pymode_rope = 1
 
@@ -215,6 +203,7 @@ let g:python_highlight_all = 1
 " to install
 "       cd ~/.vim/bundle
 "       git clone git://github.com/vim-scripts/ScrollColors.git
+
 map <silent><F12> :NEXTCOLOR<cr>
 map <silent><F11> :PREVCOLOR<cr>
 
@@ -222,6 +211,7 @@ map <silent><F11> :PREVCOLOR<cr>
 " to install
 "       cd ~/.vim/bundle
 "       git clone git://github.com/plasticboy/vim-markdown.git
+
 let g:vim_markdown_folding_disabled=1       " disable folding
 
 "------------------------------ conky-syntax.vim -------------------------------
@@ -246,6 +236,37 @@ let g:vim_markdown_folding_disabled=1       " disable folding
 " to install
 "       cd ~/.vim/bundle
 "       git clone https://github.com/tmhedberg/matchit.git
+
+"---------------------------------- SuperTab -----------------------------------
+" to install
+"       cd ~/.vim/bundle
+"       git clone https://github.com/ervandew/supertab.git
+
+" Supertab keys:
+"   <Tab>         for all your insert completion needs
+"   <Ctrl><Tab>   to insert a tab (must set expandtab)
+"   >>            to insert a tab at the begining of the line
+
+" Native word complete still works
+" just type the first couple of characters of a word, then press:
+"   Ctrl-N      to insert the next matching word; or
+"   Ctrl-P      to insert the previous matching word
+
+"let g:SuperTabDefaultCompletionType = "<c-n>"        " navigate the completion menu from bottom to top
+let g:SuperTabContextDefaultCompletionType = "<c-n>"  " navigate the completion menu from top to bottom
+
+"---------------------------------- SnipMate -----------------------------------
+" NOT INSTALLED YET    NOT INSTALLED YET    NOT INSTALLED YET    NOT INSTALLED YET
+" http://code.tutsplus.com/tutorials/vim-essential-plugin-snipmate--net-19356
+" https://github.com/ervandew/supertab
+
+"---------------------------------- Surround -----------------------------------
+" NOT INSTALLED YET    NOT INSTALLED YET    NOT INSTALLED YET    NOT INSTALLED YET
+" http://code.tutsplus.com/tutorials/vim-essential-plugin-surround--net-19253
+
+"------------------------------- YouCompleteMe ---------------------------------
+" NOT INSTALLED YET    NOT INSTALLED YET    NOT INSTALLED YET    NOT INSTALLED YET
+" http://www.alexeyshmalko.com/2014/youcompleteme-ultimate-autocomplete-plugin-for-vim/
 
 
 
@@ -510,10 +531,28 @@ set pastetoggle=<F11>
 """"""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
 "	Text Searching
 """"""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
+" from http://www.fprintf.net/vimCheatSheet.html
+" /{pattern}[/]             Search forward for the [count]'th occurrence of {pattern}
+" /{pattern}/{offset}	    Search forward for the [count]'th occurrence of {pattern} and go {offset} lines up or down.
+" /<CR>                     Search forward for the [count]'th latest used pattern
+" //{offset}<CR>            Search forward for the [count]'th latest used pattern with new.
+"                           If {offset} is empty no offset is used.
+" ?{pattern}[?]<CR>         Search backward for the [count]'th previous occurrence of {pattern}
+" ?{pattern}?{offset}<CR>   Search backward for the [count]'th previous occurrence of {pattern}
+"                           and go {offset} lines up or down
+" ?<CR>                     backward for the [count]'th latest used pattern
+" ??{offset}<CR>            Search backward for the [count]'th latest used pattern with new {offset}.
+"                           If {offset} is empty no offset is used.
+" n                         Repeat the latest "/" or "?" [count] times.
+" N                         Repeat the latest "/" or "?" [count] times in opposite direction.
+
 set incsearch       " find the next match as we type the search
-set hlsearch        " highlight searches by default
 set ignorecase      " ignore case when searching...
 set smartcase       " ...unless you type a capital
+set hlsearch        " highlight searches by default
+
+" set the highlight color for search
+highlight Search guifg=Black guibg=Pink gui=none ctermfg=White ctermbg=Blue
 
 " if the search term highlighting gets annoying, set a key to switch it off temporarily
 " clears the search highlights
@@ -526,11 +565,18 @@ nmap <silent> <leader>n :silent :nohlsearch<cr>
 """"""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
 " use markers to set places you want to quickly get back to,
 " or to specify a block of text you want to copy or cut.
-" mk      - mark current position (can use a-z)
-" 'k      - move to mark k
-" d'k     - delete from current position to mark k
-" 'a-z    - same file
-" 'A-Z    - beteween files
+" from http://www.fprintf.net/vimCheatSheet.html
+" m{a-zA-Z}                 Set mark {a-zA-Z} at cursor position (does not move the cursor, this is not a motion command).
+" m' or m`                  Set the previous context mark. This can be jumped to with the "''" or "``" command
+"                           (does not move the cursor, this is not a motion command).
+" :[range]ma[rk] {a-zA-Z}   Set mark {a-zA-Z} at last line number in [range], column 0. Default is cursor line.
+" :[range]k{a-zA-Z}         Same as :mark, but the space before the mark name can be omitted.
+" '{a-z}                    To the first non-blank character on the line with mark {a-z} (linewise).
+" '{A-Z0-9}                 To the first non-blank character on the line with mark {A-Z0-9} in the correct file
+" `{a-z}                    To the mark {a-z}
+" `{A-Z0-9}                 To the mark {A-Z0-9} in the correct file
+" :marks                    List all the current marks (not a motion command).
+" :marks {arg}              List the marks that are mentioned in {arg} (not a motion command).
 
 
 
@@ -605,7 +651,7 @@ augroup END
 
 
 """"""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
-"   Files, Backups, and Undo
+"   Backups
 """"""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
 " disable backup and swap files (they trigger too many events)
 set nobackup
@@ -620,6 +666,27 @@ if has('win32') || has('win64')
 else
     set backupdir=~/.vim/backup                             " for Linux
     set directory=~/.vim/tmp                                " for Linux
+endif
+
+
+
+""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
+"  Persistent Undo
+"""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
+" from http://www.fprintf.net/vimCheatSheet.html
+" u         Undo [count] changes.
+" :u[ndo]	Undo one change.
+" CTRL-R	Redo [count] changes which were undone.
+" :red[o]	Redo one change which was undone.
+" U         Undo all latest changes on one line. {Vi: while not moved off of it}
+" .         Repeat last change, with count replaced with [count].
+
+" Once you quit Vim, the undo history for that file is gone.
+" Keep undo history across sessions by storing it in a file
+" Make sure ~/.vim/backup has been created
+if has('persistent_undo')
+    set undodir=~/.vim/backup   " location of undo history
+    set undofile                " maintain undo history between sessions
 endif
 
 
@@ -703,7 +770,18 @@ autocmd BufWrite *.coffee :call DeleteTrailingWS()
 "  Command Completion
 """"""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
 " pressing <TAB> in command mode will choose the first possible completion
-" this lets you see what your other options are
+
+
+
+""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
+"  Word Completion
+""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
+" In insert mode, type the first couple of characters of a word, then press:
+"   Ctrl-N  to insert the next matching word; or
+"   Ctrl-P  to insert the previous matching word
+"
+" http://usevim.com/2012/07/06/vim101-completion/
+
 set wildmenu        " enable ctrl-n and ctrl-p to scroll thru matches
 
 " have the completion behave similarly to a shell (i.e. complete only up to the point of ambiguity)
@@ -715,6 +793,34 @@ set wildignore+=*.o,*.obj,*.exe,*.dll,*.manifest    " Compiled Object files
 set wildignore+=*.sw?                               " Vim swap files
 set wildignore+=*.pyc                               " Python Object codes
 set wildignore+=*.orig                              " Merge resolution files
+
+" longest - only insert the longest common text of the matches
+" menu - use a popup menu to show the possible completions
+" preview - show extra information about the currently selected
+set completeopt=longest,menu,preview
+
+" look for matches in . = The current buffer, w = Buffers in other windows,
+" b = Other loaded buffers, u = Unloaded buffers, t = Tags, i = Included files
+"set complete=.,w,b,u,t,i,k
+set complete=.      " the current buffer
+set complete+=w     " Buffers in other windows
+set complete+=b     " Other loaded buffers
+set complete+=u     " Unloaded buffers
+set complete+=t     " Tags
+set complete+=i     " Included files
+set complete+=k     " scan dictionary
+
+" dictionary used
+set dictionary=/usr/share/dict/words
+
+
+
+""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
+"  Code Completion
+""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
+" Eample - http://www.alexeyshmalko.com/2014/youcompleteme-ultimate-autocomplete-plugin-for-vim/
+" you can get word completion through CTRL+N & CTRL+P and
+" code completion through omnifunc with CTRL+X  CTRL+O
 
 
 
@@ -736,6 +842,7 @@ endif
 """"""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
 "  Status Line
 """"""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
+" consider replacing with with Vim Airline - http://jchain.github.io/blog/2013/07/17/fly-with-vim-airline/
 " status line broken down into easily include-able segments of information
 if has('statusline')
     set laststatus=2                                    " Always show the status line
@@ -951,6 +1058,23 @@ endfunction
 
 " Map this feature to the key sequence <leader>a or '\a'
 map <leader>a :call PreviewMarkdown()<cr>
+
+
+
+""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
+"   Exit Vim
+""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
+" from http://www.fprintf.net/vimCheatSheet.html
+" :q[uit]           Quit Vim. This fails when changes have been made.
+" :q[uit]!          Quit without writing.
+" :cq[uit]          Quit always, without writing.
+" :wq               Write the current file and exit.
+" :wq!              Write the current file and exit always.
+" :wq {file}        Write to {file}. Exit if not editing the last
+" :wq! {file}       Write to {file} and exit always.
+" :[range]wq[!]     [file] Same as above, but only write the lines in [range].
+" ZZ                Write current file, if modified, and exit.
+" ZQ                Quit current file and exit (same as ":q!").
 
 
 

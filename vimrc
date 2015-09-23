@@ -1,5 +1,5 @@
 " Maintainer:   jeffskinnerbox@yahoo.com / www.jeffskinnerbox.me
-" Version:      1.0.7
+" Version:      1.0.8
 
 """"""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
 "   Must Do First Stuff
@@ -63,21 +63,21 @@ set undolevels=200  " use many muchos levels of undo
 " setting of the value. Put the the font into your .vimrc via 'set guifont=foo"'
 
 " Set extra options when running in GUI mode
-if has("gui_running")           " settings for GUI Vim (i.e. gvim)
-	set t_Co=256                " tells Vim the number of colors available
+if has("gui_running")               " settings for GUI Vim (i.e. gvim)
+	set t_Co=256                    " tells Vim the number of colors available
 	set guitablabel=%M\ %t
-    set guioptions-=T           " remove the tool bar
-    set guioptions-=r
-    set guioptions-=L
-    set guioptions+=a
-	set guioptions+=e
-    set guioptions-=m
-    colorscheme jellybeans      "load color scheme {name} by searches 'runtimepath' for the file 'colors/{name}.vim'
-    set guifont=Inconsolata\ 10
-else                            " settings for Terminal Vim (i.e. vim)
-	set t_Co=256                " tells Vim the number of colors available
-    colorscheme jellybeans      "load color scheme {name} by searches 'runtimepath' for the file 'colors/{name}.vim'
-    set guifont=Consolas:h10:cANSI
+    set guioptions-=T               " remove the tool bar (for Win32)
+    set guioptions-=r               " no right-hand scrollbar
+    set guioptions-=L               " no left-hand scrollbar is present when there is a vertically split window
+    set guioptions+=a               " autoselect for the modeless selection
+	set guioptions+=e               " add tab page
+    set guioptions-=m               " no menu bar
+    colorscheme jellybeans          " load color scheme {name} by searches 'runtimepath' for the file 'colors/{name}.vim'
+    set guifont=Inconsolata\ 10     " set fonts to be used
+else                                " settings for Terminal Vim (i.e. vim)
+	set t_Co=256                    " tells Vim the number of colors available
+    colorscheme jellybeans          " load color scheme {name} by searches 'runtimepath' for the file 'colors/{name}.vim'
+    set guifont=Consolas:h10:cANSI  " set fonts to be used
 endif
 
 "execute 'set colorcolumn=' . join(range(81,335), ',')  " set all lines after columns 80 to another color
@@ -267,6 +267,7 @@ let g:SuperTabContextDefaultCompletionType = "<c-n>"  " navigate the completion 
 "------------------------------- YouCompleteMe ---------------------------------
 " NOT INSTALLED YET    NOT INSTALLED YET    NOT INSTALLED YET    NOT INSTALLED YET
 " http://www.alexeyshmalko.com/2014/youcompleteme-ultimate-autocomplete-plugin-for-vim/
+" http://tilvim.com/2013/08/21/js-autocomplete.html
 
 
 
@@ -760,8 +761,9 @@ function! DeleteTrailingWS()
     exe "normal `z"
 endfunc
 
-" delete trailing white space for Python and CoffeeScript
+" delete trailing white space for Python, Markdown, and CoffeeScript
 autocmd BufWrite *.py :call DeleteTrailingWS()
+autocmd BufWrite *.md :call DeleteTrailingWS()
 autocmd BufWrite *.coffee :call DeleteTrailingWS()
 
 
@@ -975,6 +977,7 @@ set viminfo^=%
 "
 " Requires the `markdown` command to be on the system path. If you
 " do not have the `markdown` command, install one of the following:
+"       sudo apt-get install markdown
 "       http://www.pell.portland.or.us/~orc/Code/discount/
 "       http://www.freewisdom.org/projects/python-markdown/
 "
@@ -1127,6 +1130,16 @@ iabbrev #v """""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
 iabbrev #s #-----------------------------------------------------------------------------
 iabbrev @@ jeff.irland@gmail.net
 iabbrev ccopy Copyright 2015 Jeffrey C. Irland, all rights reserved.
+
+
+
+""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
+"  Edit of Files in the Same Directory
+""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
+" source: http://vim.wikia.com/wiki/Easy_edit_of_files_in_the_same_directory
+
+" %% expands to the full path of the directory that contains the current file
+cabbr <expr> %% expand('%:p:h')
 
 
 

@@ -46,6 +46,29 @@ Example "diw" does a delete in word
 | :x | Almost the same as :wq, write the file and exit if you've made changes to the file. If you haven't made any changes to the file, Vim exits without writing the file. |
 | CTRL-Z | Suspend Vim, like ":stop".  Works in Normal and in Visual mode.  In Insert and Command-line mode, the CTRL-Z is inserted as a normal character. |
 
+### How to Exit
+| Vim Command | Action|
+|:-----------:|:------|
+| :q[uit] | Quit Vim. This fails when changes have been made. |
+| :q[uit]! | Quit without writing. |
+| :cq[uit] | Quit always, without writing. |
+| :wq | Write the current file and exit. |
+| :wq! | Write the current file and exit always. |
+| :wq {file} | Write to {file}. Exit if not editing the last |
+| :wq! {file} | Write to {file} and exit always. |
+| :[range]wq[!] | [file] Same as above, but only write the lines in [range]. |
+| ZZ | Write current file, if modified, and exit. |
+| ZQ | Quit current file and exit (same as ":q!"). |
+
+### Editing a File
+| Vim Command | Action|
+|:-----------:|:------|
+| :e[dit] | Edit the current file. This is useful to re-edit the current file, when it has been changed outside of Vim. |
+| :e[dit]! | Edit the current file always. Discard any changes to the current buffer. This is useful if you want to start all over again. |
+| :e[dit] {file} | Edit {file}. |
+| :e[dit]! {file} | Edit {file} always. Discard any changes to the current buffer. |
+| gf | Edit the file whose name is under or after the cursor. Mnemonic: "goto file". |
+
 ## Moving around in the file
 These Vim commands and keys work both in command mode and visual mode.
 

@@ -1,5 +1,5 @@
 " Maintainer:   jeffskinnerbox@yahoo.com / www.jeffskinnerbox.me
-" Version:      1.0.8
+" Version:      1.0.9
 
 """"""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
 "   Must Do First Stuff
@@ -966,6 +966,41 @@ set viminfo^=%
 
 
 """"""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
+"  Open in Browser URL Under Cursor
+""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
+" See - http://vim.wikia.com/wiki/Open_a_web-browser_with_the_URL_in_the_current_line
+"       http://stackoverflow.com/questions/9458294/open-url-under-cursor-in-vim-with-browser
+function! HandleURL()
+    " ** Configurable settings start here **
+    let MARKDOWN_COMMAND = 'markdown'
+
+    if has('win32') || has('win64')
+        " note important extra pair of double-quotes
+        let BROWSER_COMMAND = 'cmd.exe /c start ""'
+    else
+        "let BROWSER_COMMAND = 'xdg-open'
+        "let BROWSER_COMMAND = 'chromium-browser'
+        let BROWSER_COMMAND = 'google-chrome --enable-plugins'
+    endif
+    " ** End of configurable settings **
+
+    let s:url = matchstr(getline("."), '[a-z]*:\/\/[^ >,;]*')
+    "let s:url = matchstr (getline('.'), '\%(http://\|www\.\)[^ ,;\t]*')
+    echo s:url
+
+    if s:url != ""
+        silent exec '!' . BROWSER_COMMAND . ' "' . s:url . '"'
+    else
+        echo "No URL found in line."
+    endif
+endfunction
+
+" Map this feature to the key sequence <leader>u or '\u'
+map <leader>u :call HandleURL()<cr>
+
+
+
+""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
 "  Markdown Preview
 """"""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
 " While editing a Markdown document in Vim, preview it in the default browser.
@@ -997,7 +1032,6 @@ function!PreviewMarkdown()
         "let BROWSER_COMMAND = 'chromium-browser'
         let BROWSER_COMMAND = 'google-chrome --enable-plugins'
     endif
-
     " ** End of configurable settings **
 
     silent update

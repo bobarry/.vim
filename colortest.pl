@@ -1,4 +1,7 @@
 #!/usr/bin/perl
+#
+# Maintainer:   jeffskinnerbox@yahoo.com / www.jeffskinnerbox.me
+# Version:      1.1.0
 
 # by entheon, do whatever the hell you want with this file
 

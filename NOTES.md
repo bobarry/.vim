@@ -5,7 +5,7 @@ via [git][01] and [GitHub][02].  For more information, check out these posts:
 * [Using Git and Github to Manage Your Dotfiles][03]
 * [Managing dot files with Git][04]
 
-===
+====
 
 ### Testing Terminal Colors
 Both of those scripts

@@ -8,7 +8,7 @@ multiple systems I'm presently use.
 I will explain here how I established the git environment on my local machine,
 how I established a GitHub for that environment, how to replicate the Vim environment
 to another machine, and how to update both the local git repository and GitHub.
- 
+
 ## References / Sources
 Information about Vim
 
@@ -16,7 +16,7 @@ Information about Vim
 * [The Recipes][02]
 * [Turning Vim into a modern Python IDE][03]
 * [Configuring Vim right][11]
- 
+
 Vim Scripting Tutorials
 
 * Run the Linux Vim tutorial program - Linux program called "vimtutor"
@@ -26,7 +26,7 @@ Vim Scripting Tutorials
 * [How to Write Vim Plugins with Python][07]
 * [:best of Vim][10]
 * [Scripting the Vim editor, Part 1: Variables, values, and expressions][12]
- 
+
 Maintaining and Synchronizing Vim on Other Machines
 
 * [Submodules and Pathogen][08]

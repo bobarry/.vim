@@ -1,3 +1,7 @@
+
+NOTE: Replace this with notes concerning a clone of the github .vim
+followed by some  virtual links to the vimrc resource file.
+
 #!/bin/bash
 
 # Maintainer:   jeffskinnerbox@yahoo.com / www.jeffskinnerbox.me

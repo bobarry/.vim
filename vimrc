@@ -213,6 +213,7 @@ map <silent><F11> :PREVCOLOR<cr>
 "       git clone git://github.com/plasticboy/vim-markdown.git
 
 let g:vim_markdown_folding_disabled=1       " disable folding
+au BufNewFile,BufRead *.md setf markdown    " if extention is md, set file type to markdown  
 
 "------------------------------ conky-syntax.vim -------------------------------
 " to install
@@ -504,15 +505,17 @@ set visualbell          " see a brief window flash on error
 "  Clipboard, Copy & Paste
 """"""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
 " Vim lets us access the system clipboard using the quoteplus register, "+.
-" http://vimcasts.org/episodes/accessing-the-system-clipboard-from-vim/
-" http://vim.wikia.com/wiki/Accessing_the_system_clipboard
-" http://vim.wikia.com/wiki/Cut/copy_and_paste_using_visual_selection
+"
+" Sources: http://vimcasts.org/episodes/accessing-the-system-clipboard-from-vim/
+"          http://vim.wikia.com/wiki/Accessing_the_system_clipboard
+"          http://vim.wikia.com/wiki/Cut/copy_and_paste_using_visual_selection
 
 " "+y - if you want to yank text from a Vim buffer into the system clipboard
 " "+dd - if you want to cut text from a Vim buffer into the system clipboard
 " "+p - paste text from the system clipboard into your Vim buffer
 
 " use th system clipboard for all yank, delete, change, put operations that don't have  a register
+
 set clipboard=unnamed
 
 " This will make <F10> start paste mode and <F11> stop paste mode.
@@ -532,7 +535,8 @@ set pastetoggle=<F11>
 """"""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
 "	Text Searching
 """"""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
-" from http://www.fprintf.net/vimCheatSheet.html
+" Source: http://www.fprintf.net/vimCheatSheet.html
+"
 " /{pattern}[/]             Search forward for the [count]'th occurrence of {pattern}
 " /{pattern}/{offset}	    Search forward for the [count]'th occurrence of {pattern} and go {offset} lines up or down.
 " /<CR>                     Search forward for the [count]'th latest used pattern
@@ -584,7 +588,8 @@ nmap <silent> <leader>n :silent :nohlsearch<cr>
 """"""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
 "  Text Indentation / Tabs
 """"""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
-" http://vim.wikia.com/wiki/Indenting_source_code
+" Source: http://vim.wikia.com/wiki/Indenting_source_code
+"
 " auto-indentation rules are just the defaults and will most-likely will be
 " overridden by plugins you use for common programming languages
 set autoindent      " always set autoindenting on
@@ -622,8 +627,11 @@ set listchars=tab:>-,trail:.,extends:#,nbsp:.
 """"""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
 "  Line Wrapping and Breaking
 """"""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
-" improve the display of line wraps - http://www.bestofvim.com/tip/better-line-wraps/
-" http://www.tagwith.com/question_1169785_vim-change-lines-font-color-based-upon-first-character-in-the-line
+" Improve the display of line wraps
+"
+" Source: http://www.bestofvim.com/tip/better-line-wraps/
+"         http://www.tagwith.com/question_1169785_vim-change-lines-font-color-based-upon-first-character-in-the-line
+
 "set nowrap
 set wrap			" wrap lines when they are larger than the window size
 set wrapmargin=4	" number of characters from right window border when wrapping starts
@@ -820,7 +828,7 @@ set dictionary=/usr/share/dict/words
 """"""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
 "  Code Completion
 """"""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
-" Eample - http://www.alexeyshmalko.com/2014/youcompleteme-ultimate-autocomplete-plugin-for-vim/
+" Example - http://www.alexeyshmalko.com/2014/youcompleteme-ultimate-autocomplete-plugin-for-vim/
 " you can get word completion through CTRL+N & CTRL+P and
 " code completion through omnifunc with CTRL+X  CTRL+O
 
@@ -968,8 +976,11 @@ set viminfo^=%
 """"""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
 "  Open in Browser URL Under Cursor
 """"""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
-" See - http://vim.wikia.com/wiki/Open_a_web-browser_with_the_URL_in_the_current_line
-"       http://stackoverflow.com/questions/9458294/open-url-under-cursor-in-vim-with-browser
+" When the cursor is on a URL, open the URL in your defined browser
+"
+" Source: http://vim.wikia.com/wiki/Open_a_web-browser_with_the_URL_in_the_current_line
+"         http://stackoverflow.com/questions/9458294/open-url-under-cursor-in-vim-with-browser
+"
 function! HandleURL()
     " ** Configurable settings start here **
     let MARKDOWN_COMMAND = 'markdown'

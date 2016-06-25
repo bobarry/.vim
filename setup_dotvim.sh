@@ -1,6 +1,6 @@
 
 NOTE: Replace this with notes concerning a clone of the github .vim
-followed by some  virtual links to the vimrc resource file. 
+followed by some virtual links to the vimrc resource file. 
 
 #!/bin/bash
 
@@ -13,7 +13,7 @@ followed by some  virtual links to the vimrc resource file.
 #
 # This script will setup the .vim directory, and in general, make the Vim
 # resource file usable.  This should be executed immediately after you have created
-# the local git repository via: git clone http://github.com/jeffskinnerbox/dotvim.git ~/.vim
+# the local git repository via: git clone http://github.com/jeffskinnerbox/.vim ~/.vim
 
 
 # directory used to store Vim file
@@ -44,7 +44,7 @@ cp -ar * $TMPDIR
 mkdir -p $VIMDIR/backup $VIMDIR/tmp
 
 # download and install your vim resource file
-curl -Sso $VIMDIR/vimrc https://raw.githubusercontent.com/jeffskinnerbox/dotvim/master/vimrc
+curl -Sso $VIMDIR/vimrc https://raw.githubusercontent.com/jeffskinnerbox/.vim/master/vimrc
 
 # download and install pathogen
 curl -Sso $VIMDIR/autoload/pathogen.vim https://raw.githubusercontent.com/tpope/vim-pathogen/master/autoload/pathogen.vim

@@ -65,12 +65,12 @@ Create a README.md file, add all the files, and make initial comment
 Goto GitHub and create the new repository
 
     goto https://github.com/jeffskinnerbox
-    <create empty repository called 'dotvim'>
+    <create empty repository called '.vim'>
 
 ### Loading the GitHub Repository for the First Time
 Within the ~.vim directory, use git to load the files to GitHub
 
-    git remote add origin https://github.com/jeffskinnerbox/dotvim.git
+    git remote add origin https://github.com/jeffskinnerbox/.vim.git
     git push -u origin master
 
 ### To Update the Local Git Repository
@@ -97,7 +97,7 @@ Login into the target machine and go to its $HOME
 and clone the Vim environment by execute the following:
 
     cd ~
-    git clone http://github.com/jeffskinnerbox/dotvim.git ~/.vim
+    git clone http://github.com/jeffskinnerbox/.vim.git ~/.vim
     ln -s ~/.vim/vimrc ~/.vimrc
     ln -s ~/.vim/gvimrc ~/.gvimrc
     cd ~/.vim
